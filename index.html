@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    h1 {
+      padding-left: 50px;
+    }
+    #mapdiv {
+      text-align: right;
+    }
+    div[class="col-md-3 col-sm-12 col-lg-2"] {
+      padding-left: 40px;
+    }
+    label[class="form-check-label"] {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px solid black; /* If you want dots under the hoverable text */
+    }
+    label[class="form-check-label"] .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: black;
+    color: #fff;
+    border-radius: 6px;
+    padding: 5px;
+    font-size: 12px;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px;
+    pointer-events : none
+    }
+    label[class="form-check-label"]:hover .tooltiptext {
+    visibility: visible;
+    }
+/* 
+    div[class="row"] {
+    outline: 1px dotted rgba(0, 0, 0, 0.25);
+}
+    div[class^="col-"] {
+    background-color: rgba(255, 0, 0, 0.2);
+    outline: 1px dotted rgba(0, 0, 0, 0.5);
+} */
+  </style>
+  <title>E-waste Map</title>
+  <h1><strong>E-waste Collection Points</strong></h1>
+  <link rel="stylesheet" href="/e-waste/leaflet/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+  <script src="/e-waste/leaflet/leaflet.js"
+  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+  crossorigin=""></script>
+    <!-- font awesome -->
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- leaflet awesome markers -->
+  <script src="/e-waste/JS/leaflet.awesome-markers.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- CSS only -->
+  <link href="/e-waste/bootstrap/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+</head>
+<body>
+  <!-- Buttons Segment -->
+  <div class="row">
+      <div class="col-md-3 col-sm-12 col-lg-2">
+        <div class="btn-group">
+          <div class="d-grid gap-2 col-12">
+           <button type="button" id="currentlocation" class="btn btn-warning">Search Nearby</button>
+           <!-- <button type="button" id="eBin" class="btn btn-primary btn-sm">ICT Equipment, Batteries and Lamps only</button> -->
+           <h5>I want to dispose:</h5>
+           <div class="form-check form-switch">
+            <input type="checkbox" id="ict" class="form-check-input" checked>
+            <label class="form-check-label" for="ict">ICT Equipment<span class="tooltiptext">Printers, power banks, computers, laptops, mobile phones & tablets, modems, routers, set-top boxes, small TVs & desktop monitors).
+              Devices must be able to fit through the 500mm x 250mm slot.</span></label>
+           </div>
+           <!-- <button type="button" id="bbBin" class="btn btn-success btn-sm">Batteries and Lamps only</button> -->
+           <div class="form-check form-switch">
+            <input type="checkbox" id="bulb" class="form-check-input" unchecked>
+            <label class="form-check-label" for="bulb">Bulbs and lamps<span class="tooltiptext">Light bulbs with bulb circumference of no more than 100mm. Long fluorescent/LED tubes are not accepted. Please dispose them through ALBA's collection drives or doorstep collection.</span></label>
+           </div>
+           <!-- <button type="button" id="batteryBin" class="btn btn-warning btn-sm">Batteries only</button> -->
+           <div class="form-check form-switch">
+            <input type="checkbox" id="battery" class="form-check-input" unchecked>
+            <label class="form-check-label" for="battery">Batteries<span class="tooltiptext">Batteries (AA, AAA, AAAA, D, C, 9-volt, Button Cell only) are accepted.</span></label>
+           </div>
+           <!-- <button type="button" id="nonreg" class="btn btn-info btn-sm">Non-regulated products only</button> -->
+           <div class="form-check form-switch">
+            <input type="checkbox" id="nonreg" class="form-check-input" unchecked>
+            <label class="form-check-label" for="nonreg">Non-regulated products
+              <span class="tooltiptext">
+                Non-regulated products includes:
+              <ul>
+                <li>Game console, keyboard and mouse, docking stations, remote control</li>
+                <li>Telephone (home, office), calculator, clocks, CCTV</li>
+                <li>Power supply, wires, cables, chargers, torch light</li>
+                <li>Headphones, earbuds, air-pods, camera, projector, Bluetooth speaker</li>
+                <li>Home systems (sound systems: amplifier, speaker, woofer, sound bar)</li>
+                <li>Thumb drive, portable hard disk, PCB board, SD cards</li>
+                <li>Rice cooker, electric kettle, hair dryer and straightener, air fryer</li>
+                <li>Fan, vacuum cleaner</li>
+                <li>Small medical equipment (blood pressure monitor, blood glucose monitor)</li>
+              </ul>
+            </span>
+          </label>
+           </div>
+           <!-- <button type="button" id="inktoner" class="btn btn-warning btn-sm">Ink & Toner cartridges</button> -->
+           <div class="form-check form-switch">
+            <input type="checkbox" id="inktoner" class="form-check-input" unchecked>
+            <label class="form-check-label" for="inktoner">Ink & Toner cartridges<span class="tooltiptext">All ink and toner cartridges, regardless of brand.</span></label>
+           </div>
+           <button type="button" id="allBin" class="btn btn-dark">Show All</button>
+           <button type="button" id="clearall" class="btn btn-dark">Clear All</button><p>
+           <p id="result"></p>
+        </div>
+      </div>
+    </div>  
+    <!-- Map Segment -->
+    <div class="col-md-8 col-sm-12 col-lg-6">
+      <form>
+        <div class="row">
+        <div class="col-md-8 col-sm-12 col-lg-6">
+          <div class="form-group">
+            <input type="text" class="form-control" id="searchBar" aria-describedby="emailHelp" placeholder="Enter postal code or address"><br>
+          </div>
+        </div>
+        <div class="col-3">
+          <button type="button" class="btn btn-primary" id='searchButton'>Submit</button><br>
+        </div>
+      </div>
+      </form>
+      <div id="mapdiv" style="height:150%;width:100%"></div><p>
+      <script
+      src="https://code.jquery.com/jquery-3.2.1.min.js"
+      integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+      crossorigin="anonymous"></script>  
+      <script src="/e-waste/JS/map.js"></script>
+      <p id="result"></p>
+    </div>
+    <div class="col-md-12 col-sm-12 col-lg-12">
+      <!-- Show Marker Result -->
+    </div>
+  </div>
+    <!-- Map End -->
+</body>
+</html>
