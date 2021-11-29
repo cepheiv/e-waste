@@ -39,6 +39,7 @@ input.addEventListener("keypress", function(event) {
       url: "https://developers.onemap.sg/commonapi/search?searchVal=" + searchval + "&returnGeom=Y&getAddrDetails=Y&pageNum=1",
       async: true,
       success: function(results){
+        if (results.found > 0) {
         searchLatitude = results.results[0].LATITUDE;
         searchLongitude = results.results[0].LONGITUDE;
         map.flyTo([searchLatitude, searchLongitude],16);
@@ -47,7 +48,10 @@ input.addEventListener("keypress", function(event) {
         .setLatLng([searchLatitude, searchLongitude])
         .openOn(map);
         heremarker = new L.Marker([searchLatitude, searchLongitude], {bounceOnAdd: true, icon: customMarker}).bindPopup(popup,{minWidth:50}).addTo(map);
-        console.log(map)
+        }
+        else {
+          alert("No results found.")
+        }
       }
     })
   }
@@ -62,6 +66,7 @@ $("#searchButton").click(function() {
     url: "https://developers.onemap.sg/commonapi/search?searchVal=" + searchval + "&returnGeom=Y&getAddrDetails=Y&pageNum=1",
     async: true,
     success: function(results){
+      if (results.found > 0) {
       searchLatitude = results.results[0].LATITUDE;
       searchLongitude = results.results[0].LONGITUDE;
       map.flyTo([searchLatitude, searchLongitude],16);
@@ -70,6 +75,10 @@ $("#searchButton").click(function() {
       .setLatLng([searchLatitude, searchLongitude])
       .openOn(map);
       heremarker = new L.Marker([searchLatitude, searchLongitude], {bounceOnAdd: true, icon: customMarker}).bindPopup(popup,{minWidth:50}).addTo(map);
+      }
+      else {
+        alert("No results found.")
+      }
     }
   })
 });
@@ -139,7 +148,7 @@ promise.then(function(data) {
   var inktonerlayerGroup = L.layerGroup().addTo(map);
   for (var i = 1; i < data.SrchResults.length; i++) {
     var collectionType = data.SrchResults[i].DESCRIPTION;
-    if (collectionType == "Bin collection; E-waste accepted: ICT equipment, Batteries and Lamps only" || collectionType ==  "Drop-off and Bin Collection; All regulated e-waste under First Schedule at https://go.gov.sg/prod-def-sl, Large Household Appliances, ICT Equipment, Portable Batteries, Lamps, Electric Mobility Devices") {
+    if (collectionType == "Bin collection; E-waste accepted: ICT equipment, Batteries and Lamps only" || collectionType == "Manned collection (Contact staff for disposal); E-waste accepted: ICT equipment, Batteries and Lamps only" || collectionType ==  "Drop-off and Bin Collection; All regulated e-waste under First Schedule at https://go.gov.sg/prod-def-sl, Large Household Appliances, ICT Equipment, Portable Batteries, Lamps, Electric Mobility Devices") {
       var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
       var LatLng = data.SrchResults[i].LatLng;
       var lat = parseFloat(LatLng.split(',')[0]);
@@ -167,7 +176,7 @@ promise.then(function(data) {
           element.innerHTML = content;
       })
       eBinlayerGroup.addLayer(eBinMarker)
-      } else if (collectionType == "Bin collection; E-waste accepted: Batteries and Lamps only") {
+      } else if (collectionType == "Bin collection; E-waste accepted: Batteries and Lamps only" || collectionType == "Manned collection (Contact staff for disposal); E-waste accepted: Batteries and Lamps only") {
         var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
         var LatLng = data.SrchResults[i].LatLng;
         var lat = parseFloat(LatLng.split(',')[0]);
