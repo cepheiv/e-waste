@@ -15,8 +15,6 @@ $.ajax
     }
 });
 
-//var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjc2MjAsInVzZXJfaWQiOjc2MjAsImVtYWlsIjoiY2VwaGVpdkBnbWFpbC5jb20iLCJmb3JldmVyIjpmYWxzZSwiaXNzIjoiaHR0cDpcL1wvb20yLmRmZS5vbmVtYXAuc2dcL2FwaVwvdjJcL3VzZXJcL3Nlc3Npb24iLCJpYXQiOjE2Mzc0MTg4NTIsImV4cCI6MTYzNzg1MDg1MiwibmJmIjoxNjM3NDE4ODUyLCJqdGkiOiJiYjEzMTdjNWU3N2U0NzY1YjU4MGVjYmJlMGI3ZmNhYiJ9.SkrLZvMC0SqPtI91Jq8eQGEkIavdNfLQjfhFfxZb61M";
-
 // Define address variables
 var searchLatitude;
 var searchLongitude;
@@ -194,7 +192,7 @@ promise.then(function(data) {
         var binicon = L.AwesomeMarkers.icon({
         prefix: 'fa',
         markerColor: 'green',
-        icon: 'recycle'
+        icon: 'lightbulb'
         })
         bbBinMarker = L.marker([lat, lng], {icon: binicon}).bindPopup(popup,{minWidth:100});
         bbBinMarker.on('click',function(e){
@@ -222,7 +220,7 @@ promise.then(function(data) {
         var binicon = L.AwesomeMarkers.icon({
         prefix: 'fa',
         markerColor: 'red',
-        icon: 'recycle'
+        icon: 'battery-quarter'
         })
         batteryBinMarker = L.marker([lat, lng], {icon: binicon}).bindPopup(popup,{minWidth:100});
         batteryBinMarker.on('click',function(e){
@@ -371,8 +369,8 @@ promise.then(function(data) {
         map.addLayer(mannedlayerGroup)
         ict_click = true
       } else if (ict_click == true && bulb_click == true && battery_click == true) {
-        // Remove manned layer only
-        map.removeLayer(mannedlayerGroup)
+        // Remove nothing
+        // map.removeLayer(mannedlayerGroup)
         ict_click = false
       } else if (ict_click == true && bulb_click == true) {
         // Remove manned layer only
