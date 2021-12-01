@@ -168,7 +168,7 @@ var popuptemp =
   '<p><strong>{buildingName}</strong><p>' +
   '<strong>Type of Collection and E-waste accepted:</strong><br>{collectionType}<p>' +
   '<strong>Address:</strong><br>{streetName}, SINGAPORE {postalCode}<p>' +
-  '<strong>Latitude & Longitude</strong><br>{LatLng}<p>' +
+  '<strong>Latitude & Longitude</strong><br>LatLng<p>' +
   '<strong>More information at:</strong><br>{hyperlink}</div>';
 
 var promise = $.getJSON("https://developers.onemap.sg/privateapi/themesvc/retrieveTheme?queryName=ewaste&token=" + token);
