@@ -46,14 +46,57 @@ input.addEventListener("keypress", function(event) {
         .setLatLng([searchLatitude, searchLongitude])
         .openOn(map);
         heremarker = new L.Marker([searchLatitude, searchLongitude], {bounceOnAdd: true, icon: customMarker}).bindPopup(popup,{minWidth:50}).addTo(map);
-        }
-        else {
+        } else {
           alert("No results found.")
         }
       }
     })
   }
 });
+
+// Autocomplete
+$(document).ready(function(){
+  function log(message) {
+    $("<div>").text(message).prependTo("#searchBar");
+    $("#searchBar").scrollTop(0);
+  }
+  $("#searchBar").autocomplete({
+        source: function(request, response) {
+          $.ajax
+          ({
+            url: "https://developers.onemap.sg/commonapi/search?searchVal=" + request.term + "&returnGeom=Y&getAddrDetails=Y&pageNum=1",
+            async: true,
+            success: function(data) {
+            if (data.results.length > 3) {
+            response([
+              data.results[0].SEARCHVAL,
+              data.results[1].SEARCHVAL,
+              data.results[2].SEARCHVAL,
+              data.results[3].SEARCHVAL,
+              data.results[4].SEARCHVAL,
+              data.results[5].SEARCHVAL]);
+            } else {
+              response([
+                data.results[0].SEARCHVAL,
+                data.results[1].SEARCHVAL,])
+            } 
+          }
+        })
+      },
+      minLength: 2,
+      select: function( event, ui ) {
+        log( ui.item ?
+          "Selected: " + ui.item.label :
+          "Nothing selected, input was " + this.value);
+      },
+      open: function() {
+        $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+      },
+      close: function() {
+        $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+      }
+    })
+  })
 
 // Setup search button for user to search based on their queries
 $("#searchButton").click(function() {
