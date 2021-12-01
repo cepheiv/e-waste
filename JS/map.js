@@ -173,8 +173,6 @@ var popuptemp =
 
 var promise = $.getJSON("https://developers.onemap.sg/privateapi/themesvc/retrieveTheme?queryName=ewaste&token=" + token);
 promise.then(function(data) {
-  //do a bunch of stuff here
-  //console.log(data.SrchResults) // take a look at the data in the console
   var eBinMarker = [];
   var bbBinMarker = [];
   var batteryBinMarker =[];
