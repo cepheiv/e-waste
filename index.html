@@ -12,43 +12,43 @@
       padding-left: 20px;
     }
     .ui-autocomplete-loading {
-    background: white;
+      background: white;
     }
     #ui-id-1 {z-index: 9999;}
     label[class="form-check-label"] {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px solid black;
+      position: relative;
+      display: inline-block;
+      border-bottom: 1px solid black;
     }
     label[class="form-check-label"] .tooltiptext {
-    visibility: hidden;
-    width: 200px;
-    background-color: black;
-    color: #fff;
-    border-radius: 6px;
-    padding: 5px;
-    font-size: 12px;
+      visibility: hidden;
+      width: 200px;
+      background-color: black;
+      color: #fff;
+      border-radius: 6px;
+      padding: 5px;
+      font-size: 12px;
     /* Position the tooltip */
-    position: absolute;
-    z-index: 1;
-    top: 100%;
-    left: 50%;
-    margin-left: -60px;
-    pointer-events : none
+      position: absolute;
+      z-index: 1;
+      top: 100%;
+      left: 50%;
+      margin-left: -60px;
+      pointer-events : none
     }
     label[class="form-check-label"]:hover .tooltiptext {
-    visibility: visible;
+      visibility: visible;
     }
     table {
-      font-size:80%;
+      font-size:12px;
     }
     .fa-stack-2x {
       padding-top: 4px;
     }
-    /* .leaflet-popup{
+/*      .leaflet-popup{
       width:300px;
     } */
-    /* div[class="row"] {
+     /* div[class="row"] {
     outline: 1px dotted rgba(0, 0, 0, 0.25);
     }
     div[class^="col-"] {
@@ -73,155 +73,152 @@
 </head>
 <body>
   <!-- Buttons Segment -->
-  <div class="row">
+  <div class="container-fluid">
+    <div class="row">
       <div class="col-md-4 col-sm-12 col-lg-3">
         <div class="btn-group">
           <div class="d-grid gap-2 col-12">
             <form>
               <div class="row">
-              <div class="col-8">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="searchBar" placeholder="Enter postal code or address">
+                <div class="col-8">
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="searchBar" placeholder="Enter postal code or address">
+                  </div>
+                </div>
+                <div class="d-grid gap-2 col-4 mx-auto">
+                  <button type="button" class="btn btn-primary" id='searchButton'>Submit</button>
                 </div>
               </div>
-              <div class="d-grid gap-2 col-4 mx-auto">
-                <button type="button" class="btn btn-primary" id='searchButton'>Submit</button>
+              </form>
+              <button type="button" id="currentlocation" class="btn btn-warning">Search Nearby</button>
+              <h5>I want to dispose:</h5>
+              <div class="form-check form-switch">
+                <input type="checkbox" id="ict" class="form-check-input" checked>
+                <label class="form-check-label" for="ict">ICT Equipment<span class="tooltiptext">Printers, power banks, computers, laptops, mobile phones & tablets, modems, routers, set-top boxes, small TVs & desktop monitors).
+                  Devices must be able to fit through the 500mm x 250mm slot.</span></label>
               </div>
-            </div>
-            </form>
-            <button type="button" id="currentlocation" class="btn btn-warning">Search Nearby</button>
-            <!-- <button type="button" id="eBin" class="btn btn-primary btn-sm">ICT Equipment, Batteries and Lamps only</button> -->
-             <h5>I want to dispose:</h5>
+              <div class="form-check form-switch">
+                <input type="checkbox" id="bulb" class="form-check-input" unchecked>
+                <label class="form-check-label" for="bulb">Bulbs and lamps<span class="tooltiptext">Light bulbs with bulb circumference of no more than 100mm. Long fluorescent/LED tubes are not accepted. Please dispose them through ALBA's collection drives or doorstep collection.</span></label>
+              </div>
+              <div class="form-check form-switch">
+                <input type="checkbox" id="battery" class="form-check-input" unchecked>
+                <label class="form-check-label" for="battery">Batteries<span class="tooltiptext">Batteries (AA, AAA, AAAA, D, C, 9-volt, Button Cell only) are accepted.</span></label>
+              </div>
+              <div class="form-check form-switch">
+                <input type="checkbox" id="nonreg" class="form-check-input" unchecked>
+                <label class="form-check-label" for="nonreg">Non-regulated products
+                  <span class="tooltiptext">
+                    Non-regulated products includes:
+                  <ul>
+                    <li>Game console, keyboard and mouse, docking stations, remote control</li>
+                    <li>Telephone (home, office), calculator, clocks, CCTV</li>
+                    <li>Power supply, wires, cables, chargers, torch light</li>
+                    <li>Headphones, earbuds, air-pods, camera, projector, Bluetooth speaker</li>
+                    <li>Home systems (sound systems: amplifier, speaker, woofer, sound bar)</li>
+                    <li>Thumb drive, portable hard disk, PCB board, SD cards</li>
+                    <li>Rice cooker, electric kettle, hair dryer and straightener, air fryer</li>
+                    <li>Fan, vacuum cleaner</li>
+                    <li>Small medical equipment (blood pressure monitor, blood glucose monitor)</li>
+                  </ul>
+                  </span>
+                </label>
+             </div>
             <div class="form-check form-switch">
-              <input type="checkbox" id="ict" class="form-check-input" checked>
-              <label class="form-check-label" for="ict">ICT Equipment<span class="tooltiptext">Printers, power banks, computers, laptops, mobile phones & tablets, modems, routers, set-top boxes, small TVs & desktop monitors).
-                Devices must be able to fit through the 500mm x 250mm slot.</span></label>
+              <input type="checkbox" id="inktoner" class="form-check-input" unchecked>
+              <label class="form-check-label" for="inktoner">Ink & toner cartridges<span class="tooltiptext">All ink and toner cartridges, regardless of brand.</span></label>
             </div>
-           <!-- <button type="button" id="bbBin" class="btn btn-success btn-sm">Batteries and Lamps only</button> -->
-            <div class="form-check form-switch">
-              <input type="checkbox" id="bulb" class="form-check-input" unchecked>
-              <label class="form-check-label" for="bulb">Bulbs and lamps<span class="tooltiptext">Light bulbs with bulb circumference of no more than 100mm. Long fluorescent/LED tubes are not accepted. Please dispose them through ALBA's collection drives or doorstep collection.</span></label>
-            </div>
-           <!-- <button type="button" id="batteryBin" class="btn btn-warning btn-sm">Batteries only</button> -->
-            <div class="form-check form-switch">
-              <input type="checkbox" id="battery" class="form-check-input" unchecked>
-              <label class="form-check-label" for="battery">Batteries<span class="tooltiptext">Batteries (AA, AAA, AAAA, D, C, 9-volt, Button Cell only) are accepted.</span></label>
-            </div>
-           <!-- <button type="button" id="nonreg" class="btn btn-info btn-sm">Non-regulated products only</button> -->
-            <div class="form-check form-switch">
-              <input type="checkbox" id="nonreg" class="form-check-input" unchecked>
-              <label class="form-check-label" for="nonreg">Non-regulated products
-                <span class="tooltiptext">
-                  Non-regulated products includes:
-                <ul>
-                  <li>Game console, keyboard and mouse, docking stations, remote control</li>
-                  <li>Telephone (home, office), calculator, clocks, CCTV</li>
-                  <li>Power supply, wires, cables, chargers, torch light</li>
-                  <li>Headphones, earbuds, air-pods, camera, projector, Bluetooth speaker</li>
-                  <li>Home systems (sound systems: amplifier, speaker, woofer, sound bar)</li>
-                  <li>Thumb drive, portable hard disk, PCB board, SD cards</li>
-                  <li>Rice cooker, electric kettle, hair dryer and straightener, air fryer</li>
-                  <li>Fan, vacuum cleaner</li>
-                  <li>Small medical equipment (blood pressure monitor, blood glucose monitor)</li>
-                </ul>
-                </span>
-              </label>
-           </div>
-           <!-- <button type="button" id="inktoner" class="btn btn-warning btn-sm">Ink & Toner cartridges</button> -->
-          <div class="form-check form-switch">
-            <input type="checkbox" id="inktoner" class="form-check-input" unchecked>
-            <label class="form-check-label" for="inktoner">Ink & toner cartridges<span class="tooltiptext">All ink and toner cartridges, regardless of brand.</span></label>
+            <button type="button" id="allBin" class="btn btn-dark">Show All</button>
+            <button type="button" id="clearall" class="btn btn-dark">Clear All</button>
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th colspan="3" style="text-align:center;">Map Legend</th>
+                </tr>
+                <tr>
+                  <th scope="col">Name of Programme</th>
+                  <th scope="col">Icon</th>
+                  <th scope="col">Type of e-waste accepted at collection point</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td rowspan="4">Extended Producer Responsibility (EPR) Scheme for E-waste organised by ALBA E-waste Smart Recycling Pte Ltd</td>
+                  <td>
+                    <span class="fa-stack fa-1x">
+                      <i class="fa-solid fa-location-pin fa-stack-2x" style="color:rgb(36, 145, 196)"></i>
+                      <i class="fa-solid fa-laptop fa-stack-1x fa-inverse fa-xs"></i>
+                    </span>
+                  </td>
+                  <td>ICT equipment, batteries and lamps only</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="fa-stack fa-1x">
+                      <i class="fa-solid fa-location-pin fa-stack-2x" style="color:darkslategray"></i>
+                      <i class="fa-solid fa-laptop fa-stack-1x fa-inverse fa-xs"></i>
+                    </span>
+                  </td>
+                  <td>ICT equipment and batteries only</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="fa-stack fa-1x">
+                      <i class="fa-solid fa-location-pin fa-stack-2x" style="color:limegreen"></i>
+                      <i class="fa-solid fa-lightbulb fa-stack-1x fa-inverse fa-xs"></i>
+                    </span>
+                  </td>
+                  <td>Batteries and lamps only</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="fa-stack fa-1x">
+                      <i class="fa-solid fa-location-pin fa-stack-2x" style="color:red"></i>
+                      <i class="fa-solid fa-battery-quarter fa-stack-1x fa-inverse fa-xs"></i>
+                    </span>
+                  </td>
+                  <td>Batteries only</td>
+                </tr>
+                <tr>
+                  <td>Virogreen NECDC E-waste Recycling Programme for Non-regulated E-waste</td>
+                  <td>
+                    <span class="fa-stack fa-1x">
+                      <i class="fa-solid fa-location-pin fa-stack-2x" style="color:darkorchid"></i>
+                      <i class="fa-solid fa-recycle fa-stack-1x fa-inverse fa-xs"></i>
+                    </span>
+                  </td>
+                  <td>Non-regulated products only</td>
+                </tr>
+                <tr>
+                  <td>Project Homecoming - Ink and Toner Cartridge Recycling Programme</td>
+                  <td>
+                    <span class="fa-stack fa-1x">
+                      <i class="fa-solid fa-location-pin fa-stack-2x" style="color:orange"></i>
+                      <i class="fa-solid fa-print fa-stack-1x fa-inverse fa-xs"></i>
+                    </span>
+                  </td>
+                  <td>Ink and toner cartridges only</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <button type="button" id="allBin" class="btn btn-dark">Show All</button>
-          <button type="button" id="clearall" class="btn btn-dark">Clear All</button>
-          <table class="table table-sm">
-            <thead>
-              <tr>
-                <th colspan="3" style="text-align:center;">Map Legend</th>
-              </tr>
-              <tr>
-                <th scope="col">Name of Programme</th>
-                <th scope="col">Icon</th>
-                <th scope="col">Type of e-waste accepted at collection point</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td rowspan="4">Extended Producer Responsibility (EPR) Scheme for E-waste organised by ALBA E-waste Smart Recycling Pte Ltd</td>
-                <td>
-                  <span class="fa-stack fa-1x">
-                    <i class="fa-solid fa-location-pin fa-stack-2x" style="color:rgb(36, 145, 196)"></i>
-                    <i class="fa-solid fa-laptop fa-stack-1x fa-inverse fa-xs"></i>
-                  </span>
-                </td>
-                <td>ICT equipment, batteries and lamps only</td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="fa-stack fa-1x">
-                    <i class="fa-solid fa-location-pin fa-stack-2x" style="color:darkslategray"></i>
-                    <i class="fa-solid fa-laptop fa-stack-1x fa-inverse fa-xs"></i>
-                  </span>
-                </td>
-                <td>ICT equipment and batteries only</td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="fa-stack fa-1x">
-                    <i class="fa-solid fa-location-pin fa-stack-2x" style="color:limegreen"></i>
-                    <i class="fa-solid fa-lightbulb fa-stack-1x fa-inverse fa-xs"></i>
-                  </span>
-                </td>
-                <td>Batteries and lamps only</td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="fa-stack fa-1x">
-                    <i class="fa-solid fa-location-pin fa-stack-2x" style="color:red"></i>
-                    <i class="fa-solid fa-battery-quarter fa-stack-1x fa-inverse fa-xs"></i>
-                  </span>
-                </td>
-                <td>Batteries only</td>
-              </tr>
-              <tr>
-                <td>Virogreen NECDC E-waste Recycling Programme for Non-regulated E-waste</td>
-                <td>
-                  <span class="fa-stack fa-1x">
-                    <i class="fa-solid fa-location-pin fa-stack-2x" style="color:darkorchid"></i>
-                    <i class="fa-solid fa-recycle fa-stack-1x fa-inverse fa-xs"></i>
-                  </span>
-                </td>
-                <td>Non-regulated products only</td>
-              </tr>
-              <tr>
-                <td>Project Homecoming - Ink and Toner Cartridge Recycling Programme</td>
-                <td>
-                  <span class="fa-stack fa-1x">
-                    <i class="fa-solid fa-location-pin fa-stack-2x" style="color:orange"></i>
-                    <i class="fa-solid fa-print fa-stack-1x fa-inverse fa-xs"></i>
-                  </span>
-                </td>
-                <td>Ink and toner cartridges only</td>
-              </tr>
-            </tbody>
-          </table>
         </div>
+      </div>  
+      <!-- Map Segment -->
+      <div class="col-md-8 col-sm-12 col-lg-6">
+        <div id="mapdiv" style="height:700px;width:100%"></div><p>
+        <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>  
+        <script src="./JS/map.js"></script>
+        <!-- <p id="result"></p> -->
       </div>
-    </div>  
-    <!-- Map Segment -->
-    <div class="col-md-8 col-sm-12 col-lg-6">
-      <div id="mapdiv" style="height:700px;width:100%"></div><p>
-      <script
-      src="https://code.jquery.com/jquery-3.2.1.min.js"
-      integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-      crossorigin="anonymous"></script>
-      <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>  
-      <script src="./JS/map.js"></script>
-      <!-- <p id="result"></p> -->
-    </div>
-    <div class="col-md-12 col-sm-12 col-lg-3">
-      <!-- Show Marker Result -->
-      <p id="result"></p>
+      <div class="col-md-4 col-sm-12 col-lg-3">
+        <!-- Show Marker Result -->
+        <p id="result"></p>
+      </div>
     </div>
   </div>
     <!-- Map End -->
