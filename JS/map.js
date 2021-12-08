@@ -71,7 +71,6 @@ $(document).ready(function(){
               for (var i = 0; i < data.results.length; i++) {
                 output[i] = data.results[i].SEARCHVAL + " (" + data.results[i].BLK_NO + " " + data.results[i].ROAD_NAME + ")" 
               }
-              console.log(data)
               response(output.slice(0,output.length))
             }
           })
