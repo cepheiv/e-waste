@@ -67,22 +67,15 @@ $(document).ready(function(){
             url: "https://developers.onemap.sg/commonapi/search?searchVal=" + request.term + "&returnGeom=Y&getAddrDetails=Y&pageNum=1",
             async: true,
             success: function(data) {
-            if (data.results.length > 3) {
-            response([
-              data.results[0].SEARCHVAL,
-              data.results[1].SEARCHVAL,
-              data.results[2].SEARCHVAL,
-              data.results[3].SEARCHVAL,
-              data.results[4].SEARCHVAL,
-              data.results[5].SEARCHVAL]);
-            } else {
-              response([
-                data.results[0].SEARCHVAL,
-                data.results[1].SEARCHVAL,])
-            } 
-          }
-        })
-      },
+              var output = []
+              for (var i = 0; i < data.results.length; i++) {
+                output[i] = data.results[i].SEARCHVAL + " (" + data.results[i].BLK_NO + " " + data.results[i].ROAD_NAME + ")" 
+              }
+              console.log(data)
+              response(output.slice(0,output.length))
+            }
+          })
+        },
       minLength: 2,
       select: function( event, ui ) {
         log( ui.item ?
