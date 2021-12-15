@@ -1,20 +1,3 @@
-// Retrieve token //
-var token;
-$.ajax
-  ({
-    type: "POST",
-    url: "https://developers.onemap.sg/privateapi/auth/post/getToken",
-    dataType: 'json',
-    async: false,
-    data: {"email": "cepheiv@gmail.com", "password": "Test123!"},
-    success: function (data){
-        token = data.access_token;
-    },
-    error: function (ex){
-        console.log(ex.responseText);
-    }
-});
-
 // Define address variables
 var searchLatitude;
 var searchLongitude;
@@ -71,6 +54,7 @@ $(document).ready(function(){
               for (var i = 0; i < data.results.length; i++) {
                 output[i] = data.results[i].SEARCHVAL + " (" + data.results[i].BLK_NO + " " + data.results[i].ROAD_NAME + ")" 
               }
+              //console.log(data)
               response(output.slice(0,output.length))
             }
           })
@@ -163,7 +147,7 @@ var popuptemp =
   '<strong>Latitude & Longitude</strong><br>LatLng<p>' +
   '<strong>More information at:</strong><br>{hyperlink}</div>';
 
-var promise = $.getJSON("https://developers.onemap.sg/privateapi/themesvc/retrieveTheme?queryName=ewaste&token=" + token);
+var promise = $.getJSON("./OneMap/GetMapData/ewaste.json");
 promise.then(function(data) {
   var eBinMarker = [];
   var bbBinMarker = [];
