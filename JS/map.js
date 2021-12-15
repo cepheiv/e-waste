@@ -147,7 +147,7 @@ var popuptemp =
   '<strong>Latitude & Longitude</strong><br>LatLng<p>' +
   '<strong>More information at:</strong><br>{hyperlink}</div>';
 
-var promise = $.getJSON("./OneMap/GetMapData/ewaste.json");
+var promise = $.getJSON("./mapdata/ewaste.json");
 promise.then(function(data) {
   var eBinMarker = [];
   var bbBinMarker = [];
