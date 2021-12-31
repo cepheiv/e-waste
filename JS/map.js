@@ -141,6 +141,7 @@ $("#currentlocation").click(function() {
 
 var popuptemp =
   //'<div class="popup-info"><strong>E-waste Collection Points</strong><hr>' +
+  '<p><strong>{programmeName}</strong><p>' +
   '<p><strong>{buildingName}</strong><p>' +
   '<strong>Type of Collection and E-waste accepted:</strong><br>{collectionType}<p>' +
   '<strong>Address:</strong><br>{streetName}, SINGAPORE {postalCode}<p>' +
@@ -163,7 +164,9 @@ promise.then(function(data) {
   var inktonerlayerGroup = L.layerGroup().addTo(map);
   for (var i = 1; i < data.SrchResults.length; i++) {
     var collectionType = data.SrchResults[i].DESCRIPTION;
+    var programmeName = data.SrchResults[i].NAME;
     if (collectionType == "Bin collection; E-waste accepted: ICT equipment, Batteries and Lamps only" || collectionType == "Manned collection (Contact staff for disposal); E-waste accepted: ICT equipment, Batteries and Lamps only" || collectionType ==  "Drop-off and Bin Collection; All regulated e-waste under First Schedule at https://go.gov.sg/prod-def-sl, Large Household Appliances, ICT Equipment, Portable Batteries, Lamps, Electric Mobility Devices") {
+      var programmeName = data.SrchResults[i].NAME;
       var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
       var LatLng = data.SrchResults[i].LatLng;
       var lat = parseFloat(LatLng.split(',')[0]);
@@ -172,7 +175,8 @@ promise.then(function(data) {
       var streetName = data.SrchResults[i].ADDRESSSTREETNAME;
       var postalCode = data.SrchResults[i].ADDRESSPOSTALCODE;
       var hyperlink = data.SrchResults[i].HYPERLINK;
-      var popup = popuptemp.replace('{buildingName}',buildingName)
+      var popup = popuptemp.replace('{programmeName}',programmeName)
+                           .replace('{buildingName}',buildingName)
                            .replace('{collectionType}',collectionType)
                            .replace('{streetName}',streetName)
                            .replace('{postalCode}',postalCode)
@@ -192,6 +196,7 @@ promise.then(function(data) {
       })
       eBinlayerGroup.addLayer(eBinMarker)
       } else if (collectionType == "Bin collection; E-waste accepted: Batteries and Lamps only" || collectionType == "Manned collection (Contact staff for disposal); E-waste accepted: Batteries and Lamps only") {
+        var programmeName = data.SrchResults[i].NAME;
         var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
         var LatLng = data.SrchResults[i].LatLng;
         var lat = parseFloat(LatLng.split(',')[0]);
@@ -200,12 +205,13 @@ promise.then(function(data) {
         var streetName = data.SrchResults[i].ADDRESSSTREETNAME;
         var postalCode = data.SrchResults[i].ADDRESSPOSTALCODE;
         var hyperlink = data.SrchResults[i].HYPERLINK
-        var popup = popuptemp.replace('{buildingName}',buildingName)
-                             .replace('{collectionType}',collectionType)
-                             .replace('{streetName}',streetName)
-                             .replace('{postalCode}',postalCode)
-                             .replace('LatLng',LatLng)
-                             .replace('{hyperlink}',hyperlink);
+        var popup = popuptemp.replace('{programmeName}',programmeName)
+        .replace('{buildingName}',buildingName)
+        .replace('{collectionType}',collectionType)
+        .replace('{streetName}',streetName)
+        .replace('{postalCode}',postalCode)
+        .replace('LatLng',LatLng)
+        .replace('{hyperlink}',hyperlink);
         var binicon = L.AwesomeMarkers.icon({
         prefix: 'fa',
         markerColor: 'green',
@@ -220,6 +226,7 @@ promise.then(function(data) {
         })
         bbBinlayerGroup.addLayer(bbBinMarker)
     } else if (collectionType == "Bin collection; E-waste accepted: Batteries only") {
+        var programmeName = data.SrchResults[i].NAME
         var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
         var LatLng = data.SrchResults[i].LatLng;
         var lat = parseFloat(LatLng.split(',')[0]);
@@ -228,12 +235,13 @@ promise.then(function(data) {
         var streetName = data.SrchResults[i].ADDRESSSTREETNAME;
         var postalCode = data.SrchResults[i].ADDRESSPOSTALCODE;
         var hyperlink = data.SrchResults[i].HYPERLINK
-        var popup = popuptemp.replace('{buildingName}',buildingName)
-                             .replace('{collectionType}',collectionType)
-                             .replace('{streetName}',streetName)
-                             .replace('{postalCode}',postalCode)
-                             .replace('LatLng',LatLng)
-                             .replace('{hyperlink}',hyperlink);
+        var popup = popuptemp.replace('{programmeName}',programmeName)
+        .replace('{buildingName}',buildingName)
+        .replace('{collectionType}',collectionType)
+        .replace('{streetName}',streetName)
+        .replace('{postalCode}',postalCode)
+        .replace('LatLng',LatLng)
+        .replace('{hyperlink}',hyperlink);
         var binicon = L.AwesomeMarkers.icon({
         prefix: 'fa',
         markerColor: 'red',
@@ -248,6 +256,7 @@ promise.then(function(data) {
         })
         batteryBinlayerGroup.addLayer(batteryBinMarker)
       } else if (collectionType == "Manned collection (Contact staff for disposal); E-waste accepted: ICT equipment and Batteries only") {
+        var programmeName = data.SrchResults[i].NAME;
         var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
         var LatLng = data.SrchResults[i].LatLng;
         var lat = parseFloat(LatLng.split(',')[0]);
@@ -256,12 +265,13 @@ promise.then(function(data) {
         var streetName = data.SrchResults[i].ADDRESSSTREETNAME;
         var postalCode = data.SrchResults[i].ADDRESSPOSTALCODE;
         var hyperlink = data.SrchResults[i].HYPERLINK
-        var popup = popuptemp.replace('{buildingName}',buildingName)
-                             .replace('{collectionType}',collectionType)
-                             .replace('{streetName}',streetName)
-                             .replace('{postalCode}',postalCode)
-                             .replace('LatLng',LatLng)
-                             .replace('{hyperlink}',hyperlink);
+        var popup = popuptemp.replace('{programmeName}',programmeName)
+        .replace('{buildingName}',buildingName)
+        .replace('{collectionType}',collectionType)
+        .replace('{streetName}',streetName)
+        .replace('{postalCode}',postalCode)
+        .replace('LatLng',LatLng)
+        .replace('{hyperlink}',hyperlink);
         var binicon = L.AwesomeMarkers.icon({
         prefix: 'fa',
         markerColor: 'cadetblue',
@@ -275,7 +285,8 @@ promise.then(function(data) {
             element.innerHTML = content;
         })
         mannedlayerGroup.addLayer(mannedMarker)
-      } else if (collectionType == "Bin collection; E-waste accepted: Non-regulated products only; E.g. Small household appliances, gaming consoles, audio systems, power supplies") {
+      } else if (programmeName == "Virogreen NECDC E-waste Recycling Programme for Non-regulated E-waste") {
+        var programmeName = data.SrchResults[i].NAME;
         var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
         var LatLng = data.SrchResults[i].LatLng;
         var lat = parseFloat(LatLng.split(',')[0]);
@@ -284,12 +295,13 @@ promise.then(function(data) {
         var streetName = data.SrchResults[i].ADDRESSSTREETNAME;
         var postalCode = data.SrchResults[i].ADDRESSPOSTALCODE;
         var hyperlink = data.SrchResults[i].HYPERLINK
-        var popup = popuptemp.replace('{buildingName}',buildingName)
-                             .replace('{collectionType}',collectionType)
-                             .replace('{streetName}',streetName)
-                             .replace('{postalCode}',postalCode)
-                             .replace('LatLng',LatLng)
-                             .replace('{hyperlink}',hyperlink);
+        var popup = popuptemp.replace('{programmeName}',programmeName)
+        .replace('{buildingName}',buildingName)
+        .replace('{collectionType}',collectionType)
+        .replace('{streetName}',streetName)
+        .replace('{postalCode}',postalCode)
+        .replace('LatLng',LatLng)
+        .replace('{hyperlink}',hyperlink);
         var binicon = L.AwesomeMarkers.icon({
         prefix: 'fa',
         markerColor: 'purple',
@@ -303,7 +315,8 @@ promise.then(function(data) {
             element.innerHTML = content;
         })
         nonreglayerGroup.addLayer(nonregMarker);
-      } else if (collectionType == "Bin collection; E-waste accepted: Ink, toner cartridges") {
+      } else if (programmeName == "Shell-Metalo E-waste Recycling Programme for Non-regulated E-waste") {
+        var programmeName = data.SrchResults[i].NAME;
         var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
         var LatLng = data.SrchResults[i].LatLng;
         var lat = parseFloat(LatLng.split(',')[0]);
@@ -312,12 +325,43 @@ promise.then(function(data) {
         var streetName = data.SrchResults[i].ADDRESSSTREETNAME;
         var postalCode = data.SrchResults[i].ADDRESSPOSTALCODE;
         var hyperlink = data.SrchResults[i].HYPERLINK
-        var popup = popuptemp.replace('{buildingName}',buildingName)
-                             .replace('{collectionType}',collectionType)
-                             .replace('{streetName}',streetName)
-                             .replace('{postalCode}',postalCode)
-                             .replace('LatLng',LatLng)
-                             .replace('{hyperlink}',hyperlink);
+        var popup = popuptemp.replace('{programmeName}',programmeName)
+        .replace('{buildingName}',buildingName)
+        .replace('{collectionType}',collectionType)
+        .replace('{streetName}',streetName)
+        .replace('{postalCode}',postalCode)
+        .replace('LatLng',LatLng)
+        .replace('{hyperlink}',hyperlink);
+        var binicon = L.AwesomeMarkers.icon({
+        prefix: 'fa',
+        markerColor: 'orange',
+        icon: 'recycle'
+        })
+        nonregMarker = L.marker([lat, lng], {icon: binicon}).bindPopup(popup,{minWidth:100});
+        nonregMarker.on('click',function(e){
+            var popup = e.target.getPopup();
+            var content = popup.getContent();
+            const element = document.getElementById("result");
+            element.innerHTML = content;
+        })
+        nonreglayerGroup.addLayer(nonregMarker);
+      } else if (collectionType == "Bin collection; E-waste accepted: Ink, toner cartridges") {
+        var programmeName = data.SrchResults[i].NAME;
+        var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
+        var LatLng = data.SrchResults[i].LatLng;
+        var lat = parseFloat(LatLng.split(',')[0]);
+        var lng = parseFloat(LatLng.split(',')[1]);
+        var collectionType = data.SrchResults[i].DESCRIPTION;
+        var streetName = data.SrchResults[i].ADDRESSSTREETNAME;
+        var postalCode = data.SrchResults[i].ADDRESSPOSTALCODE;
+        var hyperlink = data.SrchResults[i].HYPERLINK
+        var popup = popuptemp.replace('{programmeName}',programmeName)
+        .replace('{buildingName}',buildingName)
+        .replace('{collectionType}',collectionType)
+        .replace('{streetName}',streetName)
+        .replace('{postalCode}',postalCode)
+        .replace('LatLng',LatLng)
+        .replace('{hyperlink}',hyperlink);
         var binicon = L.AwesomeMarkers.icon({
         prefix: 'fa',
         markerColor: 'orange',
