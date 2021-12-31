@@ -105,7 +105,7 @@ $("#searchButton").click(function() {
 // Set up map
 var center = L.bounds([1.51, 104.183], [1.16, 103.502]).getCenter();
 var map = L.map('mapdiv').setView([center.x, center.y], 11);
-var basemap = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
+var basemap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   detectRetina: true,
   maxZoom: 19,
   minZoom: 11
