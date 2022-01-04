@@ -406,7 +406,7 @@ promise.then(function(data) {
     $("#ict,#bulb,#battery,#manned,#nonreg,#inktoner").prop('checked', true).change();
     })
 
-    // Clear all markers / layers, except the basemap layer
+        // Clear all markers / layers, except the basemap layer and boundary layer
     $("#clearall").click(function() {
     map.eachLayer(function (layer) {
       if (layer == basemap) {
@@ -420,6 +420,7 @@ promise.then(function(data) {
       $("#ict,#bulb,#battery,#manned,#nonreg,#inktoner").prop('checked', false).change();
       document.getElementById("result").innerHTML = "" // Clear info
         });
+      boundaryLayer();
     })   
 
     // Show only ICT layer    
@@ -531,14 +532,15 @@ promise.then(function(data) {
         inktoner_click = false
       }
     })
-  
+
+    var boundaryLayer = function(data) {
       $.ajax({
       dataType: "json",
       url: "./mapdata/boundary.geojson",
       success: function(data) {
         $.each(data.features, function(key, data) {
           var color = data.properties.fill
-          L.geoJson(data, {
+          boundary = L.geoJson(data, {
             style: {
               "color": color,
               "weight": 1,
@@ -548,5 +550,7 @@ promise.then(function(data) {
         })
       } 
     })
+  }
+  boundaryLayer();
   
 });
