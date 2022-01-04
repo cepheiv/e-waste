@@ -2,27 +2,28 @@
 <html lang="en">
 <head>
   <style>
+    /* Padding for page header */
     h2 {
       padding-left: 20px;
     }
-    #mapdiv {
-      text-align: right;
-    }
-    div[class="col-md-4 col-sm-12 col-lg-3"] {
-      padding-left: 20px;
-    }
+    /* Background for autocomplete bar */
     .ui-autocomplete-loading {
       background: white;
     }
-    #ui-id-1 {z-index: 9999;}
+    /* Style for e-waste info tooltip */
+    #ui-id-1 {
+      z-index: 9999;
+    }
+    /* Style for e-waste info tooltip */
     label[class="form-check-label"] {
       position: relative;
       display: inline-block;
       border-bottom: 1px solid black;
     }
+    /* Style for e-waste info tooltip */
     label[class="form-check-label"] .tooltiptext {
       visibility: hidden;
-      width: 200px;
+      width: 300px;
       background-color: black;
       color: #fff;
       border-radius: 6px;
@@ -36,21 +37,45 @@
       margin-left: -60px;
       pointer-events : none
     }
+    /* Padding for collection points legend icon */
     label[class="form-check-label"]:hover .tooltiptext {
       visibility: visible;
     }
+    /* Font size for collection points legend table */
     table {
       font-size:12px;
     }
+    /* Margin for collection points legend icon */
     span[class="fa-stack fa-1x"] {
       margin-bottom: 5px;
     }
+    /* Padding for collection points legend icon */
     .fa-stack-2x {
       padding-top: 4px;
+    }
+    /* Style for location result */
+    #result {
+      background: white;
+      padding-left: 10px;
+      width: 300px;
+      border-radius: 10px;
+      box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+    }
+    /* Align Show all and Clear all button to centre */
+    div[class="col-6"] {
+      text-align: center;
+    }
+    /* Set Show all and Clear all button to 200px */
+    #allBin {
+      width: 215px;
+    }
+    #clearall {
+      width: 215px;
     }
 /*      .leaflet-popup{
       width:300px;
     } */
+    /* Highlight of row grids */
      /* div[class="row"] {
     outline: 1px dotted rgba(0, 0, 0, 0.25);
     }
@@ -61,13 +86,14 @@
   </style>
   <title>E-waste Map</title>
   <h2><strong>E-waste Collection Points</strong></h2>
+  <!-- Leaflet -->
   <link rel="stylesheet" href="./JS/leaflet/leaflet.css">
   <script src="./JS/leaflet/leaflet.js"></script>
   <!-- Leaflet search -->
   <script src="./JS/leaflet-search.min.js"></script>
-  <!-- font awesome -->
+  <!-- Font awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- leaflet awesome markers -->
+  <!-- Leaflet awesome markers -->
   <script src="./JS/leaflet.awesome-markers.js"></script>
   <link rel="stylesheet" href="./CSS/leaflet.awesome-markers.css">
   <!-- jquery -->
@@ -133,8 +159,14 @@
               <input type="checkbox" id="inktoner" class="form-check-input" unchecked>
               <label class="form-check-label" for="inktoner">Ink & toner cartridges<span class="tooltiptext">All ink and toner cartridges, regardless of brand.</span></label>
             </div> -->
-            <button type="button" id="allBin" class="btn btn-dark">Show All</button>
-            <button type="button" id="clearall" class="btn btn-dark">Clear All</button>
+            <div class='row'>
+              <div class="col-6">
+                <button type="button" id="allBin" class="btn btn-dark btn-block">Show All</button>
+              </div>
+              <div class="col-6">
+                <button type="button" id="clearall" class="btn btn-dark">Clear All</button>
+              </div>
+            </div>
             <table class="table table-sm">
               <thead>
                 <tr>
