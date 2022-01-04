@@ -538,23 +538,12 @@ promise.then(function(data) {
       success: function(data) {
         $.each(data.features, function(key, data) {
           var color = data.properties.fill
-          //var opacity = data.properties['fill-opacity']
-          console.log
-        //   function onEachFeature(feature, layer) {
-        //     // does this feature have a property named popupContent?
-        //     if (feature.properties && feature.properties.popupContent) {
-        //         layer.bindPopup(feature.properties.popupContent);
-        //     }
-        // }
           L.geoJson(data, {
             style: {
               "color": color,
               "weight": 1,
-              "fillOpacity": 0.1}
-            // },
-            // onEachFeature: {
-            //   onEachFeature 
-            // }
+              "fillOpacity": 0.1
+            }
           }).addTo(map)
         })
       } 
