@@ -533,6 +533,17 @@ promise.then(function(data) {
       }
     })
 
+    // Bind popup to town council boundary layers
+    function onEachFeature(feature, layer) {
+      // does this feature have a property named TOWN_COUNCIL?
+      if (feature.properties && feature.properties.TOWN_COUNCIL) {
+        var town_council = feature.properties.TOWN_COUNCIL.replace("TC","TOWN COUNCIL")
+          layer.bindTooltip(town_council,{
+            sticky: true
+          });
+      }
+    }
+
     var boundaryLayer = function(data) {
       $.ajax({
       dataType: "json",
@@ -544,8 +555,9 @@ promise.then(function(data) {
             style: {
               "color": color,
               "weight": 1,
-              "fillOpacity": 0.1
-            }
+              "fillOpacity": 0.2
+            },
+            onEachFeature: onEachFeature
           }).addTo(map)
         })
       } 
