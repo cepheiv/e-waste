@@ -148,12 +148,12 @@ var popuptemp =
   '<strong>Latitude & Longitude</strong><br>LatLng<p>' +
   '<strong>More information at:</strong><br>{hyperlink}</div>';
 
-var eBinCluster = L.markerClusterGroup();
-var bbBinCluster = L.markerClusterGroup();
-var batteryBinCluster = L.markerClusterGroup();
-var mannedCluster = L.markerClusterGroup();
-var nonregCluster = L.markerClusterGroup();
-var inktonerCluster = L.markerClusterGroup();
+var eBinCluster = L.markerClusterGroup({showCoverageOnHover:false});
+var bbBinCluster = L.markerClusterGroup({showCoverageOnHover:false});
+var batteryBinCluster = L.markerClusterGroup({showCoverageOnHover:false});
+var mannedCluster = L.markerClusterGroup({showCoverageOnHover:false});
+var nonregCluster = L.markerClusterGroup({showCoverageOnHover:false});
+var inktonerCluster = L.markerClusterGroup({showCoverageOnHover:false});
 var promise = $.getJSON("./mapdata/ewaste.json");
 promise.then(function(data) {
   var eBinMarker = [];
