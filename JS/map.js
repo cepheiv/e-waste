@@ -148,6 +148,12 @@ var popuptemp =
   '<strong>Latitude & Longitude</strong><br>LatLng<p>' +
   '<strong>More information at:</strong><br>{hyperlink}</div>';
 
+var eBinCluster = L.markerClusterGroup();
+var bbBinCluster = L.markerClusterGroup();
+var batteryBinCluster = L.markerClusterGroup();
+var mannedCluster = L.markerClusterGroup();
+var nonregCluster = L.markerClusterGroup();
+var inktonerCluster = L.markerClusterGroup();
 var promise = $.getJSON("./mapdata/ewaste.json");
 promise.then(function(data) {
   var eBinMarker = [];
@@ -176,12 +182,12 @@ promise.then(function(data) {
       var postalCode = data.SrchResults[i].ADDRESSPOSTALCODE;
       var hyperlink = data.SrchResults[i].HYPERLINK;
       var popup = popuptemp.replace('{programmeName}',programmeName)
-                           .replace('{buildingName}',buildingName)
-                           .replace('{collectionType}',collectionType)
-                           .replace('{streetName}',streetName)
-                           .replace('{postalCode}',postalCode)
-                           .replace('LatLng',LatLng)
-                           .replace('{hyperlink}',hyperlink);
+      .replace('{buildingName}',buildingName)
+      .replace('{collectionType}',collectionType)
+      .replace('{streetName}',streetName)
+      .replace('{postalCode}',postalCode)
+      .replace('LatLng',LatLng)
+      .replace('{hyperlink}',hyperlink);
       var binicon = L.AwesomeMarkers.icon({
         prefix: 'fa',
         markerColor: 'blue',
@@ -194,7 +200,8 @@ promise.then(function(data) {
           const element = document.getElementById("result");
           element.innerHTML = content;
       })
-      eBinlayerGroup.addLayer(eBinMarker)
+      eBinCluster.addLayer(eBinMarker)
+      eBinlayerGroup.addLayer(eBinCluster)
       } else if (collectionType == "Bin collection; E-waste accepted: Batteries and Lamps only" || collectionType == "Manned collection (Contact staff for disposal); E-waste accepted: Batteries and Lamps only") {
         var programmeName = data.SrchResults[i].NAME;
         var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
@@ -224,7 +231,8 @@ promise.then(function(data) {
             const element = document.getElementById("result");
             element.innerHTML = content;
         })
-        bbBinlayerGroup.addLayer(bbBinMarker)
+        bbBinCluster.addLayer(bbBinMarker)
+        bbBinlayerGroup.addLayer(bbBinCluster)
     } else if (collectionType == "Bin collection; E-waste accepted: Batteries only") {
         var programmeName = data.SrchResults[i].NAME
         var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
@@ -254,7 +262,8 @@ promise.then(function(data) {
             const element = document.getElementById("result");
             element.innerHTML = content;
         })
-        batteryBinlayerGroup.addLayer(batteryBinMarker)
+        batteryBinCluster.addLayer(batteryBinMarker)
+        batteryBinlayerGroup.addLayer(batteryBinCluster)
       } else if (collectionType == "Manned collection (Contact staff for disposal); E-waste accepted: ICT equipment and Batteries only") {
         var programmeName = data.SrchResults[i].NAME;
         var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
@@ -284,7 +293,8 @@ promise.then(function(data) {
             const element = document.getElementById("result");
             element.innerHTML = content;
         })
-        mannedlayerGroup.addLayer(mannedMarker)
+        mannedCluster.addLayer(mannedMarker)
+        mannedlayerGroup.addLayer(mannedCluster)
       } else if (programmeName == "Virogreen NECDC E-waste Recycling Programme for Non-regulated E-waste") {
         var programmeName = data.SrchResults[i].NAME;
         var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
@@ -314,7 +324,8 @@ promise.then(function(data) {
             const element = document.getElementById("result");
             element.innerHTML = content;
         })
-        nonreglayerGroup.addLayer(nonregMarker);
+        nonregCluster.addLayer(nonregMarker)
+        nonreglayerGroup.addLayer(nonregCluster);
       } else if (programmeName == "Shell-Metalo E-waste Recycling Programme for Non-regulated E-waste") {
         var programmeName = data.SrchResults[i].NAME;
         var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
@@ -344,7 +355,8 @@ promise.then(function(data) {
             const element = document.getElementById("result");
             element.innerHTML = content;
         })
-        nonreglayerGroup.addLayer(nonregMarker);
+        nonregCluster.addLayer(nonregMarker)
+        nonreglayerGroup.addLayer(nonregCluster);
       } else if (collectionType == "Bin collection; E-waste accepted: Ink, toner cartridges") {
         var programmeName = data.SrchResults[i].NAME;
         var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
@@ -374,7 +386,8 @@ promise.then(function(data) {
             const element = document.getElementById("result");
             element.innerHTML = content;
         })
-        inktonerlayerGroup.addLayer(inktonerMarker);
+        inktonerCluster.addLayer(inktonerMarker)
+        inktonerlayerGroup.addLayer(inktonerCluster);
         }
         //map.removeLayer(eBinlayerGroup)
         map.removeLayer(bbBinlayerGroup)
