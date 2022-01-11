@@ -37,43 +37,6 @@ input.addEventListener("keypress", function(event) {
   }
 });
 
-// Autocomplete
-$(document).ready(function(){
-  function log(message) {
-    $("<div>").text(message).prependTo("#searchBar");
-    $("#searchBar").scrollTop(0);
-  }
-  $("#searchBar").autocomplete({
-        source: function(request, response) {
-          $.ajax
-          ({
-            url: "https://developers.onemap.sg/commonapi/search?searchVal=" + request.term + "&returnGeom=Y&getAddrDetails=Y&pageNum=1",
-            async: true,
-            success: function(data) {
-              var output = []
-              for (var i = 0; i < data.results.length; i++) {
-                output[i] = data.results[i].SEARCHVAL + " (" + data.results[i].BLK_NO + " " + data.results[i].ROAD_NAME + ")" 
-              }
-              //console.log(data)
-              response(output.slice(0,output.length))
-            }
-          })
-        },
-      minLength: 2,
-      select: function( event, ui ) {
-        log( ui.item ?
-          "Selected: " + ui.item.label :
-          "Nothing selected, input was " + this.value);
-      },
-      open: function() {
-        $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
-      },
-      close: function() {
-        $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
-      }
-    })
-  })
-
 // Setup search button for user to search based on their queries
 $("#searchButton").click(function() {
   searchval = document.getElementById("searchBar").value;
@@ -100,17 +63,55 @@ $("#searchButton").click(function() {
   })
 });
 
+// Setup Autocomplete
+$(document).ready(function(){
+  function log(message) {
+    $("<div>").text(message).prependTo("#searchBar");
+    $("#searchBar").scrollTop(0);
+  }
+  $("#searchBar").autocomplete({
+        source: function(request, response) {
+          $.ajax
+          ({
+            url: "https://developers.onemap.sg/commonapi/search?searchVal=" + request.term + "&returnGeom=Y&getAddrDetails=Y&pageNum=1",
+            async: true,
+            success: function(data) {
+              var output = []
+              for (var i = 0; i < data.results.length; i++) {
+                output[i] = data.results[i].ADDRESS
+              }
+              //console.log(data)
+              //return length of output, i.e. 10 results
+              response(output.slice(0,output.length))
+            }
+          })
+        },
+      minLength: 2,
+      select: function( event, ui ) {
+        log( ui.item ?
+          "Selected: " + ui.item.label :
+          "Nothing selected, input was " + this.value);
+      },
+      open: function() {
+        $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+      },
+      close: function() {
+        $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+      }
+    })
+  })
+
 // to input searchlat and seachlong to run getLocation, consider editing "You are here"
 
-// Set up map
+// Set up map (http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png)
 var center = L.bounds([1.51, 104.183], [1.16, 103.502]).getCenter();
 var map = L.map('mapdiv').setView([1.355, 103.835], 12);
 var basemap = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
   detectRetina: true,
   maxZoom: 19,
-  minZoom: 11
+  minZoom: 12
 });
-map.setMaxBounds([[1.49, 104.153], [1.15, 103.6]]);
+//map.setMaxBounds([[1.49, 104.153], [1.15, 103.6]]);
 basemap.addTo(map);
 
 function getLocation() {
@@ -127,7 +128,6 @@ function showPosition(position) {
   .setLatLng([position.coords.latitude, position.coords.longitude])
   .openOn(map);
   heremarker = new L.Marker([position.coords.latitude, position.coords.longitude], {bounceOnAdd: true, icon: customMarker}).bindPopup(popup,{minWidth:100}).addTo(map);        
-  var latlng = [];
   map.flyTo([position.coords.latitude, position.coords.longitude],16);
   //Set Timeout to remove heremarker
   //setTimeout(function() {
@@ -140,20 +140,26 @@ $("#currentlocation").click(function() {
 })
 
 var popuptemp =
-  //'<div class="popup-info"><strong>E-waste Collection Points</strong><hr>' +
   '<p><strong>{programmeName}</strong><p>' +
   '<p><strong>{buildingName}</strong><p>' +
   '<strong>Type of Collection and E-waste accepted:</strong><br>{collectionType}<p>' +
   '<strong>Address:</strong><br>{streetName}, SINGAPORE {postalCode}<p>' +
   '<strong>Latitude & Longitude</strong><br>LatLng<p>' +
-  '<strong>More information at:</strong><br>{hyperlink}</div>';
+  '<strong>More information at:</strong><br>{hyperlink}';
 
-var eBinCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:130});
-var bbBinCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150});
-var batteryBinCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150});
-var mannedCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150});
-var nonregCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150});
-var inktonerCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150});
+
+//var binCluster = L.markerClusterGroup({showCoverageOnHover:false});
+//var bbBinCluster = L.markerClusterGroup({showCoverageOnHover:false});
+//var batteryBinCluster = L.markerClusterGroup({showCoverageOnHover:false});
+//var mannedCluster = L.markerClusterGroup({showCoverageOnHover:false});
+//var nonregCluster = L.markerClusterGroup({showCoverageOnHover:false});
+//var inktonerCluster = L.markerClusterGroup({showCoverageOnHover:false});
+var binCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:130}).addTo(map);
+var bbBinCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150}).addTo(map);
+var batteryBinCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150}).addTo(map);
+var mannedCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150}).addTo(map);
+var nonregCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150}).addTo(map);
+var inktonerCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150}).addTo(map);
 var promise = $.getJSON("./mapdata/ewaste.json");
 promise.then(function(data) {
   var eBinMarker = [];
@@ -162,12 +168,12 @@ promise.then(function(data) {
   var mannedMarker = [];
   var nonregMarker = [];
   var inktonerMarker = [];
-  var eBinlayerGroup = L.layerGroup().addTo(map);
-  var bbBinlayerGroup = L.layerGroup().addTo(map);
-  var batteryBinlayerGroup = L.layerGroup().addTo(map);
-  var mannedlayerGroup = L.layerGroup().addTo(map);
-  var nonreglayerGroup = L.layerGroup().addTo(map);
-  var inktonerlayerGroup = L.layerGroup().addTo(map);
+  var eBinlayerGroup = L.layerGroup();
+  var bbBinlayerGroup = L.layerGroup();
+  var batteryBinlayerGroup = L.layerGroup();
+  var mannedlayerGroup = L.layerGroup();
+  var nonreglayerGroup = L.layerGroup();
+  var inktonerlayerGroup = L.layerGroup();
   for (var i = 1; i < data.SrchResults.length; i++) {
     var collectionType = data.SrchResults[i].DESCRIPTION;
     var programmeName = data.SrchResults[i].NAME;
@@ -200,8 +206,8 @@ promise.then(function(data) {
           const element = document.getElementById("result");
           element.innerHTML = content;
       })
-      eBinCluster.addLayer(eBinMarker)
-      eBinlayerGroup.addLayer(eBinCluster)
+      eBinlayerGroup.addLayer(eBinMarker)
+      binCluster.addLayer(eBinMarker)
       } else if (collectionType == "Bin collection; E-waste accepted: Batteries and Lamps only" || collectionType == "Manned collection (Contact staff for disposal); E-waste accepted: Batteries and Lamps only") {
         var programmeName = data.SrchResults[i].NAME;
         var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
@@ -231,8 +237,8 @@ promise.then(function(data) {
             const element = document.getElementById("result");
             element.innerHTML = content;
         })
-        bbBinCluster.addLayer(bbBinMarker)
-        bbBinlayerGroup.addLayer(bbBinCluster)
+        bbBinlayerGroup.addLayer(bbBinMarker)
+        binCluster.addLayer(bbBinMarker)
     } else if (collectionType == "Bin collection; E-waste accepted: Batteries only") {
         var programmeName = data.SrchResults[i].NAME
         var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
@@ -262,8 +268,8 @@ promise.then(function(data) {
             const element = document.getElementById("result");
             element.innerHTML = content;
         })
-        batteryBinCluster.addLayer(batteryBinMarker)
-        batteryBinlayerGroup.addLayer(batteryBinCluster)
+        batteryBinlayerGroup.addLayer(batteryBinMarker)
+        binCluster.addLayer(batteryBinMarker)
       } else if (collectionType == "Manned collection (Contact staff for disposal); E-waste accepted: ICT equipment and Batteries only") {
         var programmeName = data.SrchResults[i].NAME;
         var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
@@ -293,8 +299,8 @@ promise.then(function(data) {
             const element = document.getElementById("result");
             element.innerHTML = content;
         })
-        mannedCluster.addLayer(mannedMarker)
-        mannedlayerGroup.addLayer(mannedCluster)
+        mannedlayerGroup.addLayer(mannedMarker)
+        binCluster.addLayer(mannedMarker)
       } else if (programmeName == "Virogreen NECDC E-waste Recycling Programme for Non-regulated E-waste") {
         var programmeName = data.SrchResults[i].NAME;
         var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
@@ -324,8 +330,8 @@ promise.then(function(data) {
             const element = document.getElementById("result");
             element.innerHTML = content;
         })
-        nonregCluster.addLayer(nonregMarker)
-        nonreglayerGroup.addLayer(nonregCluster);
+        nonreglayerGroup.addLayer(nonregMarker)
+        binCluster.addLayer(nonregMarker)
       } else if (programmeName == "Shell-Metalo E-waste Recycling Programme for Non-regulated E-waste") {
         var programmeName = data.SrchResults[i].NAME;
         var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
@@ -355,46 +361,9 @@ promise.then(function(data) {
             const element = document.getElementById("result");
             element.innerHTML = content;
         })
-        nonregCluster.addLayer(nonregMarker)
-        nonreglayerGroup.addLayer(nonregCluster);
-      } else if (collectionType == "Bin collection; E-waste accepted: Ink, toner cartridges") {
-        var programmeName = data.SrchResults[i].NAME;
-        var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
-        var LatLng = data.SrchResults[i].LatLng;
-        var lat = parseFloat(LatLng.split(',')[0]);
-        var lng = parseFloat(LatLng.split(',')[1]);
-        var collectionType = data.SrchResults[i].DESCRIPTION;
-        var streetName = data.SrchResults[i].ADDRESSSTREETNAME;
-        var postalCode = data.SrchResults[i].ADDRESSPOSTALCODE;
-        var hyperlink = data.SrchResults[i].HYPERLINK
-        var popup = popuptemp.replace('{programmeName}',programmeName)
-        .replace('{buildingName}',buildingName)
-        .replace('{collectionType}',collectionType)
-        .replace('{streetName}',streetName)
-        .replace('{postalCode}',postalCode)
-        .replace('LatLng',LatLng)
-        .replace('{hyperlink}',hyperlink);
-        var binicon = L.AwesomeMarkers.icon({
-        prefix: 'fa',
-        markerColor: 'orange',
-        icon: 'print'
-        })
-        inktonerMarker = L.marker([lat, lng], {icon: binicon}).bindPopup(popup,{minWidth:100});
-        inktonerMarker.on('click',function(e){
-            var popup = e.target.getPopup();
-            var content = popup.getContent();
-            const element = document.getElementById("result");
-            element.innerHTML = content;
-        })
-        inktonerCluster.addLayer(inktonerMarker)
-        inktonerlayerGroup.addLayer(inktonerCluster);
-        }
-        //map.removeLayer(eBinlayerGroup)
-        //map.removeLayer(bbBinlayerGroup)
-        //map.removeLayer(batteryBinlayerGroup)
-        //map.removeLayer(mannedlayerGroup)
-        //map.removeLayer(nonreglayerGroup)
-        //map.removeLayer(inktonerlayerGroup)
+        nonreglayerGroup.addLayer(nonregMarker)
+        binCluster.addLayer(nonregMarker)
+    }
     }
     
     var ict_click = true; // Set to false to show no icons by default
@@ -404,22 +373,28 @@ promise.then(function(data) {
     var inktoner_click = true;
 
     $("#allBin").click(function() {
-    map.addLayer(eBinlayerGroup)
+    //map.addLayer(eBinlayerGroup)
+    binCluster.addLayer(eBinlayerGroup)
+    binCluster.addLayer(bbBinlayerGroup)
+    binCluster.addLayer(batteryBinlayerGroup)
+    binCluster.addLayer(mannedlayerGroup)
+    binCluster.addLayer(nonreglayerGroup)
+    map.addLayer(binCluster)
     ict_click = true;
-    map.addLayer(bbBinlayerGroup)
     bulb_click = true;
-    map.addLayer(batteryBinlayerGroup)
     battery_click = true;
-    map.addLayer(mannedlayerGroup)
     manned_click = true;
-    map.addLayer(nonreglayerGroup)
     nonreg_click = true;
-    map.addLayer(inktonerlayerGroup)
     inktoner_click = true;
+    //map.addLayer(bbBinlayerGroup)
+    //map.addLayer(batteryBinlayerGroup)
+    //map.addLayer(mannedlayerGroup)
+    //map.addLayer(nonreglayerGroup)
+    //map.addLayer(inktonerlayerGroup)
     $("#ict,#bulb,#battery,#manned,#nonreg,#inktoner").prop('checked', true).change();
     })
 
-        // Clear all markers / layers, except the basemap layer and boundary layer
+    // Clear all markers / layers, except the basemap layer and boundary layer
     $("#clearall").click(function() {
     map.eachLayer(function (layer) {
       if (layer == basemap) {
@@ -433,15 +408,26 @@ promise.then(function(data) {
       $("#ict,#bulb,#battery,#manned,#nonreg,#inktoner").prop('checked', false).change();
       document.getElementById("result").innerHTML = "" // Clear info
         });
-      boundaryLayer();
+        binCluster.removeLayer(eBinlayerGroup)
+        binCluster.removeLayer(bbBinlayerGroup)
+        binCluster.removeLayer(batteryBinlayerGroup)
+        binCluster.removeLayer(mannedlayerGroup)
+        binCluster.removeLayer(nonreglayerGroup)
+      boundaryLayer(); // Restore boundary layer
     })   
 
     // Show only ICT layer    
     $("#ict").click(function() {
       if (ict_click == false) {
         // Add eBin and manned layers only
-        map.addLayer(eBinlayerGroup)
-        map.addLayer(mannedlayerGroup)
+        binCluster.addLayer(eBinlayerGroup)
+        binCluster.removeLayer(bbBinlayerGroup)
+        binCluster.removeLayer(batteryBinlayerGroup)
+        binCluster.addLayer(mannedlayerGroup)
+        //binCluster.removeLayer(nonreglayerGroup) // Will not remove nonreg layer
+        map.addLayer(binCluster)
+        //map.addLayer(eBinlayerGroup)
+        //map.addLayer(mannedlayerGroup)
         ict_click = true
       } else if (ict_click == true && bulb_click == true && battery_click == true) {
         // Remove nothing
@@ -449,15 +435,27 @@ promise.then(function(data) {
         ict_click = false
       } else if (ict_click == true && bulb_click == true) {
         // Remove manned layer only
-        map.removeLayer(mannedlayerGroup)
+        binCluster.addLayer(eBinlayerGroup)
+        binCluster.addLayer(bbBinlayerGroup)
+        binCluster.addLayer(batteryBinlayerGroup)
+        binCluster.removeLayer(mannedlayerGroup)
+        //binCluster.removeLayer(nonreglayerGroup)
+        map.addLayer(binCluster)
+        //map.removeLayer(mannedlayerGroup)
         ict_click = false
       } else if (ict_click == true && battery_click == true) {
         // Remove nothing
         ict_click = false
       } else if (ict_click == true) {
         // Remove eBin and manned layers only
-        map.removeLayer(eBinlayerGroup)
-        map.removeLayer(mannedlayerGroup)
+        binCluster.removeLayer(eBinlayerGroup)
+        binCluster.addLayer(bbBinlayerGroup)
+        binCluster.addLayer(batteryBinlayerGroup)
+        binCluster.removeLayer(mannedlayerGroup)
+        //binCluster.addLayer(nonreglayerGroup)
+        map.addLayer(binCluster)
+        //map.removeLayer(eBinlayerGroup)
+        //map.removeLayer(mannedlayerGroup)
         ict_click = false
       }
     })
@@ -466,23 +464,41 @@ promise.then(function(data) {
     $("#bulb").click(function() {
       if (bulb_click == false) {
         // Add eBin and bbBin layers only
-        map.addLayer(eBinlayerGroup)
-        map.addLayer(bbBinlayerGroup)
+        binCluster.addLayer(eBinlayerGroup)
+        binCluster.addLayer(bbBinlayerGroup)
+        binCluster.removeLayer(batteryBinlayerGroup)
+        binCluster.removeLayer(mannedlayerGroup)
+        //binCluster.removeLayer(nonreglayerGroup)
+        map.addLayer(binCluster)
+        //map.addLayer(eBinlayerGroup)
+        //map.addLayer(bbBinlayerGroup)
         bulb_click = true
       } else if (ict_click == true && bulb_click == true && battery_click == true) {
         // Remove nothing
         bulb_click = false
       } else if (ict_click == true && bulb_click == true) {
         // Remove bulb layer only
-        map.removeLayer(bbBinlayerGroup)
+        binCluster.addLayer(eBinlayerGroup)
+        binCluster.removeLayer(bbBinlayerGroup)
+        binCluster.addLayer(batteryBinlayerGroup)
+        binCluster.addLayer(mannedlayerGroup)
+        //binCluster.removeLayer(nonreglayerGroup)
+        map.addLayer(binCluster)
+        //map.removeLayer(bbBinlayerGroup)
         bulb_click = false
       } else if (bulb_click == true && battery_click == true) {
         // Remove nothing
         bulb_click = false
       } else if (bulb_click == true) {
         // Remove eBin and bbBin layers only
-        map.removeLayer(eBinlayerGroup)
-        map.removeLayer(bbBinlayerGroup)
+        binCluster.removeLayer(eBinlayerGroup)
+        binCluster.removeLayer(bbBinlayerGroup)
+        binCluster.addLayer(batteryBinlayerGroup)
+        binCluster.addLayer(mannedlayerGroup)
+        //binCluster.addLayer(nonreglayerGroup)
+        map.addLayer(binCluster)
+        //map.removeLayer(eBinlayerGroup)
+        //map.removeLayer(bbBinlayerGroup)
         bulb_click = false
       }
     })
@@ -491,31 +507,61 @@ promise.then(function(data) {
     $("#battery").click(function() {
       if (battery_click == false) {
         // Add all layers
-        map.addLayer(eBinlayerGroup)
-        map.addLayer(bbBinlayerGroup)
-        map.addLayer(batteryBinlayerGroup)
-        map.addLayer(mannedlayerGroup)
+        binCluster.addLayer(eBinlayerGroup)
+        binCluster.addLayer(bbBinlayerGroup)
+        binCluster.addLayer(batteryBinlayerGroup)
+        binCluster.addLayer(mannedlayerGroup)
+        //binCluster.removeLayer(nonreglayerGroup)
+        map.addLayer(binCluster)
+        //map.addLayer(eBinlayerGroup)
+        //map.addLayer(bbBinlayerGroup)
+        //map.addLayer(batteryBinlayerGroup)
+        //map.addLayer(mannedlayerGroup)
         battery_click = true
       } else if (ict_click == true && bulb_click == true && battery_click == true) {
         // Remove battery layer only
-        map.removeLayer(batteryBinlayerGroup) //
+        binCluster.addLayer(eBinlayerGroup)
+        binCluster.addLayer(bbBinlayerGroup)
+        binCluster.removeLayer(batteryBinlayerGroup)
+        binCluster.addLayer(mannedlayerGroup)
+        //binCluster.addLayer(nonreglayerGroup)
+        map.addLayer(binCluster)
+        //map.removeLayer(batteryBinlayerGroup)
         battery_click = false
       } else if (ict_click == true && battery_click == true) {
         // Remove bulb and battery layers only
-        map.removeLayer(bbBinlayerGroup)
-        map.removeLayer(batteryBinlayerGroup)
+        binCluster.addLayer(eBinlayerGroup)
+        binCluster.removeLayer(bbBinlayerGroup)
+        binCluster.removeLayer(batteryBinlayerGroup)
+        binCluster.addLayer(mannedlayerGroup)
+        //binCluster.addLayer(nonreglayerGroup)
+        map.addLayer(binCluster)
+        //map.removeLayer(bbBinlayerGroup)
+        //map.removeLayer(batteryBinlayerGroup)
         battery_click = false
       } else if (bulb_click == true && battery_click == true) {
         // Remove battery and manned layers only
-        map.removeLayer(batteryBinlayerGroup)
-        map.removeLayer(mannedlayerGroup)
+        binCluster.addLayer(eBinlayerGroup)
+        binCluster.addLayer(bbBinlayerGroup)
+        binCluster.removeLayer(batteryBinlayerGroup)
+        binCluster.removeLayer(mannedlayerGroup)
+        //binCluster.addLayer(nonreglayerGroup)
+        map.addLayer(binCluster)
+        //map.removeLayer(batteryBinlayerGroup)
+        //map.removeLayer(mannedlayerGroup)
         battery_click = false
       } else if (battery_click == true) {
         // Remove all layers
-        map.removeLayer(eBinlayerGroup)
-        map.removeLayer(bbBinlayerGroup)
-        map.removeLayer(batteryBinlayerGroup)
-        map.removeLayer(mannedlayerGroup)
+        binCluster.removeLayer(eBinlayerGroup)
+        binCluster.removeLayer(bbBinlayerGroup)
+        binCluster.removeLayer(batteryBinlayerGroup)
+        binCluster.removeLayer(mannedlayerGroup)
+        //binCluster.addLayer(nonreglayerGroup)
+        map.addLayer(binCluster)
+        //map.removeLayer(eBinlayerGroup)
+        //map.removeLayer(bbBinlayerGroup)
+        //map.removeLayer(batteryBinlayerGroup)
+        //map.removeLayer(mannedlayerGroup)
         battery_click = false
       }
     })
@@ -524,25 +570,16 @@ promise.then(function(data) {
     $("#nonreg").click(function() {
       if (nonreg_click == false) {
         // Add nonreg layer only
-        map.addLayer(nonreglayerGroup)
+        binCluster.addLayer(nonreglayerGroup)
+        map.addLayer(binCluster)
+        //map.addLayer(nonreglayerGroup)
         nonreg_click = true
       } else {
         // Remove nonreg layer only
-        map.removeLayer(nonreglayerGroup)
+        binCluster.removeLayer(nonreglayerGroup)
+        map.addLayer(binCluster)
+        //map.removeLayer(nonreglayerGroup)
         nonreg_click = false
-      }
-    })
-
-    // Show only ink & toner cartridge layer
-    $("#inktoner").click(function() {
-      if (inktoner_click == false) {
-        // Add ink & toner layer only
-        map.addLayer(inktonerlayerGroup)
-        inktoner_click = true
-      } else {
-        map.removeLayer(inktonerlayerGroup)
-        // Remove ink & toner layer only
-        inktoner_click = false
       }
     })
 
@@ -552,7 +589,9 @@ promise.then(function(data) {
       if (feature.properties && feature.properties.TOWN_COUNCIL) {
         var town_council = feature.properties.TOWN_COUNCIL.replace("TC","TOWN COUNCIL")
           layer.bindTooltip(town_council,{
+            //autoClose: true
             sticky: true
+            //direction: 'center'
           });
       }
     }
@@ -577,5 +616,5 @@ promise.then(function(data) {
     })
   }
   boundaryLayer();
-  
+
 });
