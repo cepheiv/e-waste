@@ -148,12 +148,12 @@ var popuptemp =
   '<strong>Latitude & Longitude</strong><br>LatLng<p>' +
   '<strong>More information at:</strong><br>{hyperlink}</div>';
 
-var eBinCluster = L.markerClusterGroup({showCoverageOnHover:false});
-var bbBinCluster = L.markerClusterGroup({showCoverageOnHover:false});
-var batteryBinCluster = L.markerClusterGroup({showCoverageOnHover:false});
-var mannedCluster = L.markerClusterGroup({showCoverageOnHover:false});
-var nonregCluster = L.markerClusterGroup({showCoverageOnHover:false});
-var inktonerCluster = L.markerClusterGroup({showCoverageOnHover:false});
+var eBinCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:130});
+var bbBinCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150});
+var batteryBinCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150});
+var mannedCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150});
+var nonregCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150});
+var inktonerCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150});
 var promise = $.getJSON("./mapdata/ewaste.json");
 promise.then(function(data) {
   var eBinMarker = [];
@@ -390,18 +390,18 @@ promise.then(function(data) {
         inktonerlayerGroup.addLayer(inktonerCluster);
         }
         //map.removeLayer(eBinlayerGroup)
-        map.removeLayer(bbBinlayerGroup)
-        map.removeLayer(batteryBinlayerGroup)
-        // map.removeLayer(mannedlayerGroup)
-        map.removeLayer(nonreglayerGroup)
-        map.removeLayer(inktonerlayerGroup)
+        //map.removeLayer(bbBinlayerGroup)
+        //map.removeLayer(batteryBinlayerGroup)
+        //map.removeLayer(mannedlayerGroup)
+        //map.removeLayer(nonreglayerGroup)
+        //map.removeLayer(inktonerlayerGroup)
     }
     
     var ict_click = true; // Set to false to show no icons by default
-    var bulb_click = false;
-    var battery_click = false;
-    var nonreg_click = false;
-    var inktoner_click = false;
+    var bulb_click = true;
+    var battery_click = true;
+    var nonreg_click = true;
+    var inktoner_click = true;
 
     $("#allBin").click(function() {
     map.addLayer(eBinlayerGroup)
