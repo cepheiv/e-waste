@@ -154,12 +154,7 @@ var popuptemp =
 //var mannedCluster = L.markerClusterGroup({showCoverageOnHover:false});
 //var nonregCluster = L.markerClusterGroup({showCoverageOnHover:false});
 //var inktonerCluster = L.markerClusterGroup({showCoverageOnHover:false});
-var binCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:90}).addTo(map);
-var bbBinCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150}).addTo(map);
-var batteryBinCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150}).addTo(map);
-var mannedCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150}).addTo(map);
-var nonregCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150}).addTo(map);
-var inktonerCluster = L.markerClusterGroup({showCoverageOnHover:true, maxClusterRadius:150}).addTo(map);
+var binCluster = L.markerClusterGroup({showCoverageOnHover:false}).addTo(map);
 var promise = $.getJSON("./mapdata/ewaste.json");
 promise.then(function(data) {
   var eBinMarker = [];
@@ -373,24 +368,18 @@ promise.then(function(data) {
     var inktoner_click = true;
 
     $("#allBin").click(function() {
-    //map.addLayer(eBinlayerGroup)
-    binCluster.addLayer(eBinlayerGroup)
-    binCluster.addLayer(bbBinlayerGroup)
-    binCluster.addLayer(batteryBinlayerGroup)
-    binCluster.addLayer(mannedlayerGroup)
-    binCluster.addLayer(nonreglayerGroup)
-    map.addLayer(binCluster)
-    ict_click = true;
-    bulb_click = true;
-    battery_click = true;
-    manned_click = true;
-    nonreg_click = true;
-    inktoner_click = true;
-    //map.addLayer(bbBinlayerGroup)
-    //map.addLayer(batteryBinlayerGroup)
-    //map.addLayer(mannedlayerGroup)
-    //map.addLayer(nonreglayerGroup)
-    //map.addLayer(inktonerlayerGroup)
+      binCluster.addLayer(eBinlayerGroup)
+      binCluster.addLayer(bbBinlayerGroup)
+      binCluster.addLayer(batteryBinlayerGroup)
+      binCluster.addLayer(mannedlayerGroup)
+      binCluster.addLayer(nonreglayerGroup)
+      map.addLayer(binCluster)
+      ict_click = true;
+      bulb_click = true;
+      battery_click = true;
+      manned_click = true;
+      nonreg_click = true;
+      inktoner_click = true;
     $("#ict,#bulb,#battery,#manned,#nonreg,#inktoner").prop('checked', true).change();
     })
 
@@ -416,153 +405,123 @@ promise.then(function(data) {
       boundaryLayer(); // Restore boundary layer
     })   
 
-    // Show only ICT layer    
+    // ICT click behaviour    
     $("#ict").click(function() {
-      if (ict_click == false) {
-        // Add eBin and manned layers only
+      if (ict_click == false && bulb_click == false && battery_click == false) { //1
         binCluster.addLayer(eBinlayerGroup)
-        binCluster.removeLayer(bbBinlayerGroup)
-        binCluster.removeLayer(batteryBinlayerGroup)
         binCluster.addLayer(mannedlayerGroup)
-        //binCluster.removeLayer(nonreglayerGroup) // Will not remove nonreg layer
         map.addLayer(binCluster)
-        //map.addLayer(eBinlayerGroup)
-        //map.addLayer(mannedlayerGroup)
         ict_click = true
-      } else if (ict_click == true && bulb_click == true && battery_click == true) {
-        // Remove nothing
-        // map.removeLayer(mannedlayerGroup)
-        ict_click = false
-      } else if (ict_click == true && bulb_click == true) {
-        // Remove manned layer only
-        binCluster.addLayer(eBinlayerGroup)
-        binCluster.addLayer(bbBinlayerGroup)
-        binCluster.addLayer(batteryBinlayerGroup)
-        binCluster.removeLayer(mannedlayerGroup)
-        //binCluster.removeLayer(nonreglayerGroup)
+      } else if (ict_click == false && bulb_click == true && battery_click == false) { //2
+        binCluster.addLayer(mannedlayerGroup)
         map.addLayer(binCluster)
-        //map.removeLayer(mannedlayerGroup)
+        ict_click = true
+      } else if (ict_click == false && bulb_click == false && battery_click == true) { //3
+        // do nothing
+        ict_click = true
+      } else if (ict_click == false && bulb_click == true && battery_click == true) {  //4
+        // do nothing
+        ict_click = true
+      } else if (ict_click == true && bulb_click == true && battery_click == true) {  //5
+        // do nothing
         ict_click = false
-      } else if (ict_click == true && battery_click == true) {
-        // Remove nothing
+      } else if (ict_click == true && bulb_click == true && battery_click == false) {  //6
+        binCluster.removeLayer(mannedlayerGroup)
+        map.addLayer(binCluster)
         ict_click = false
-      } else if (ict_click == true) {
-        // Remove eBin and manned layers only
+      } else if (ict_click == true && bulb_click == false && battery_click == true) {  //7
+        // do nothing
+        ict_click = false
+      } else if (ict_click == true && bulb_click == false && battery_click == false) {  //8
+        // Add eBin and manned layers only
         binCluster.removeLayer(eBinlayerGroup)
-        binCluster.addLayer(bbBinlayerGroup)
-        binCluster.addLayer(batteryBinlayerGroup)
         binCluster.removeLayer(mannedlayerGroup)
-        //binCluster.addLayer(nonreglayerGroup)
         map.addLayer(binCluster)
-        //map.removeLayer(eBinlayerGroup)
-        //map.removeLayer(mannedlayerGroup)
         ict_click = false
       }
     })
 
-    // Show only battery and bulb bin layer    
+    // bulb click behaviour    
     $("#bulb").click(function() {
-      if (bulb_click == false) {
-        // Add eBin and bbBin layers only
+      if (ict_click == false && bulb_click == false && battery_click == false) { //1
         binCluster.addLayer(eBinlayerGroup)
         binCluster.addLayer(bbBinlayerGroup)
-        binCluster.removeLayer(batteryBinlayerGroup)
-        binCluster.removeLayer(mannedlayerGroup)
-        //binCluster.removeLayer(nonreglayerGroup)
         map.addLayer(binCluster)
-        //map.addLayer(eBinlayerGroup)
-        //map.addLayer(bbBinlayerGroup)
         bulb_click = true
-      } else if (ict_click == true && bulb_click == true && battery_click == true) {
-        // Remove nothing
-        bulb_click = false
-      } else if (ict_click == true && bulb_click == true) {
-        // Remove bulb layer only
-        binCluster.addLayer(eBinlayerGroup)
-        binCluster.removeLayer(bbBinlayerGroup)
-        binCluster.addLayer(batteryBinlayerGroup)
-        binCluster.addLayer(mannedlayerGroup)
-        //binCluster.removeLayer(nonreglayerGroup)
-        map.addLayer(binCluster)
-        //map.removeLayer(bbBinlayerGroup)
-        bulb_click = false
-      } else if (bulb_click == true && battery_click == true) {
-        // Remove nothing
-        bulb_click = false
-      } else if (bulb_click == true) {
-        // Remove eBin and bbBin layers only
+      } else if (ict_click == false && bulb_click == true && battery_click == false) { //2
         binCluster.removeLayer(eBinlayerGroup)
         binCluster.removeLayer(bbBinlayerGroup)
-        binCluster.addLayer(batteryBinlayerGroup)
-        binCluster.addLayer(mannedlayerGroup)
-        //binCluster.addLayer(nonreglayerGroup)
         map.addLayer(binCluster)
-        //map.removeLayer(eBinlayerGroup)
-        //map.removeLayer(bbBinlayerGroup)
         bulb_click = false
+      } else if (ict_click == false && bulb_click == false && battery_click == true) { //3
+        // do nothing
+        bulb_click = true
+      } else if (ict_click == false && bulb_click == true && battery_click == true) {  //4
+        // do nothing
+        bulb_click = false
+      } else if (ict_click == true && bulb_click == true && battery_click == true) {  //5
+        // do nothing
+        bulb_click = false
+      } else if (ict_click == true && bulb_click == true && battery_click == false) {  //6
+        binCluster.removeLayer(bbBinlayerGroup)
+        map.addLayer(binCluster)
+        bulb_click = false
+      } else if (ict_click == true && bulb_click == false && battery_click == true) {  //7
+        // do nothing
+        bulb_click = true
+      } else if (ict_click == true && bulb_click == false && battery_click == false) {  //8
+        // Add eBin and manned layers only
+        binCluster.addLayer(bbBinlayerGroup)
+        map.addLayer(binCluster)
+        bulb_click = true
       }
     })
 
-    // Show only battery only bin layer    
+        // bulb click behaviour    
     $("#battery").click(function() {
-      if (battery_click == false) {
-        // Add all layers
+      if (ict_click == false && bulb_click == false && battery_click == false) { //1
         binCluster.addLayer(eBinlayerGroup)
         binCluster.addLayer(bbBinlayerGroup)
+        binCluster.addLayer(mannedlayerGroup)
         binCluster.addLayer(batteryBinlayerGroup)
-        binCluster.addLayer(mannedlayerGroup)
-        //binCluster.removeLayer(nonreglayerGroup)
         map.addLayer(binCluster)
-        //map.addLayer(eBinlayerGroup)
-        //map.addLayer(bbBinlayerGroup)
-        //map.addLayer(batteryBinlayerGroup)
-        //map.addLayer(mannedlayerGroup)
         battery_click = true
-      } else if (ict_click == true && bulb_click == true && battery_click == true) {
-        // Remove battery layer only
+      } else if (ict_click == false && bulb_click == true && battery_click == false) { //2
         binCluster.addLayer(eBinlayerGroup)
-        binCluster.addLayer(bbBinlayerGroup)
-        binCluster.removeLayer(batteryBinlayerGroup)
         binCluster.addLayer(mannedlayerGroup)
-        //binCluster.addLayer(nonreglayerGroup)
+        binCluster.addLayer(batteryBinlayerGroup)
         map.addLayer(binCluster)
-        //map.removeLayer(batteryBinlayerGroup)
-        battery_click = false
-      } else if (ict_click == true && battery_click == true) {
-        // Remove bulb and battery layers only
-        binCluster.addLayer(eBinlayerGroup)
-        binCluster.removeLayer(bbBinlayerGroup)
-        binCluster.removeLayer(batteryBinlayerGroup)
-        binCluster.addLayer(mannedlayerGroup)
-        //binCluster.addLayer(nonreglayerGroup)
-        map.addLayer(binCluster)
-        //map.removeLayer(bbBinlayerGroup)
-        //map.removeLayer(batteryBinlayerGroup)
-        battery_click = false
-      } else if (bulb_click == true && battery_click == true) {
-        // Remove battery and manned layers only
-        binCluster.addLayer(eBinlayerGroup)
-        binCluster.addLayer(bbBinlayerGroup)
-        binCluster.removeLayer(batteryBinlayerGroup)
-        binCluster.removeLayer(mannedlayerGroup)
-        //binCluster.addLayer(nonreglayerGroup)
-        map.addLayer(binCluster)
-        //map.removeLayer(batteryBinlayerGroup)
-        //map.removeLayer(mannedlayerGroup)
-        battery_click = false
-      } else if (battery_click == true) {
-        // Remove all layers
+        battery_click = true
+      } else if (ict_click == false && bulb_click == false && battery_click == true) { //3
         binCluster.removeLayer(eBinlayerGroup)
         binCluster.removeLayer(bbBinlayerGroup)
-        binCluster.removeLayer(batteryBinlayerGroup)
         binCluster.removeLayer(mannedlayerGroup)
-        //binCluster.addLayer(nonreglayerGroup)
+        binCluster.removeLayer(batteryBinlayerGroup)
         map.addLayer(binCluster)
-        //map.removeLayer(eBinlayerGroup)
-        //map.removeLayer(bbBinlayerGroup)
-        //map.removeLayer(batteryBinlayerGroup)
-        //map.removeLayer(mannedlayerGroup)
         battery_click = false
+      } else if (ict_click == false && bulb_click == true && battery_click == true) {  //4
+        binCluster.removeLayer(eBinlayerGroup)
+        binCluster.removeLayer(mannedlayerGroup)
+        binCluster.removeLayer(batteryBinlayerGroup)
+        map.addLayer(binCluster)
+        battery_click = false
+      } else if (ict_click == true && bulb_click == true && battery_click == true) {  //5
+        binCluster.removeLayer(batteryBinlayerGroup)
+        map.addLayer(binCluster)
+        battery_click = false
+      } else if (ict_click == true && bulb_click == true && battery_click == false) {  //6
+        binCluster.addLayer(batteryBinlayerGroup)
+        map.addLayer(binCluster)
+        battery_click = true
+      } else if (ict_click == true && bulb_click == false && battery_click == true) {  //7
+        binCluster.removeLayer(batteryBinlayerGroup)
+        map.addLayer(binCluster)
+        battery_click = false
+      } else if (ict_click == true && bulb_click == false && battery_click == false) {  //8
+        // Add eBin and manned layers only
+        binCluster.addLayer(batteryBinlayerGroup)
+        map.addLayer(binCluster)
+        battery_click = true
       }
     })
 
@@ -582,7 +541,7 @@ promise.then(function(data) {
         nonreg_click = false
       }
     })
-
+    
     // Bind popup to town council boundary layers
     function onEachFeature(feature, layer) {
       // does this feature have a property named TOWN_COUNCIL?
