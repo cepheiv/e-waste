@@ -1,3 +1,20 @@
+// // Retrieve token //
+// var token;
+// $.ajax
+//   ({
+//     type: "POST",
+//     url: "https://developers.onemap.sg/privateapi/auth/post/getToken",
+//     dataType: 'json',
+//     async: false,
+//     data: {"email": "cepheiv@gmail.com", "password": "Test123!"},
+//     success: function (data){
+//         token = data.access_token;
+//     },s
+//     error: function (ex){
+//         console.log(ex.responseText);
+//     }
+// });
+
 // Define address variables
 var searchLatitude;
 var searchLongitude;
@@ -55,10 +72,9 @@ $("#searchButton").click(function() {
       .setLatLng([searchLatitude, searchLongitude])
       .openOn(map);
       heremarker = new L.Marker([searchLatitude, searchLongitude], {bounceOnAdd: true, icon: customMarker}).bindPopup(popup,{minWidth:50}).addTo(map);
-      }
-      else {
+      } else {
         alert("No results found.")
-      }
+     }
     }
   })
 });
@@ -78,9 +94,11 @@ $(document).ready(function(){
             success: function(data) {
               var output = []
               for (var i = 0; i < data.results.length; i++) {
-                output[i] = data.results[i].ADDRESS
+                if (data.results[i].BLK_NO == ""){
+                  output[i] = data.results[i].ADDRESS
+                } else
+                output[i] = data.results[i].BLK_NO + " " + data.results[i].ROAD_NAME + " " + data.results[i].BUILDING + " SINGAPORE " +  data.results[i].POSTAL
               }
-              //console.log(data)
               //return length of output, i.e. 10 results
               response(output.slice(0,output.length))
             }
@@ -109,7 +127,7 @@ var map = L.map('mapdiv').setView([1.355, 103.835], 12);
 var basemap = L.tileLayer('https://maps-{s}.onemap.sg/v3/Default/{z}/{x}/{y}.png', {
   detectRetina: true,
   maxZoom: 19,
-  minZoom: 12
+  minZoom: 10
 });
 //map.setMaxBounds([[1.49, 104.153], [1.15, 103.6]]);
 basemap.addTo(map);
@@ -146,6 +164,14 @@ var popuptemp =
   '<strong>Address:</strong><br>{streetName}, SINGAPORE {postalCode}<p>' +
   '<strong>Latitude & Longitude</strong><br>LatLng<p>' +
   '<strong>More information at:</strong><br>{hyperlink}';
+
+
+//var binCluster = L.markerClusterGroup({showCoverageOnHover:false});
+//var bbBinCluster = L.markerClusterGroup({showCoverageOnHover:false});
+//var batteryBinCluster = L.markerClusterGroup({showCoverageOnHover:false});
+//var mannedCluster = L.markerClusterGroup({showCoverageOnHover:false});
+//var nonregCluster = L.markerClusterGroup({showCoverageOnHover:false});
+//var inktonerCluster = L.markerClusterGroup({showCoverageOnHover:false});
 
 var promise = $.getJSON("./mapdata/ewaste.json");
 promise.then(function(data) {
@@ -344,13 +370,51 @@ promise.then(function(data) {
             const element = document.getElementById("result");
             element.innerHTML = content;
         })
-        nonreglayerGroup.addLayer(nonregMarker) 
+        nonreglayerGroup.addLayer(nonregMarker)
+      // } else if (collectionType == "Bin collection; E-waste accepted: Ink, toner cartridges") {
+      //   var programmeName = data.SrchResults[i].NAME;
+      //   var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
+      //   var LatLng = data.SrchResults[i].LatLng;
+      //   var lat = parseFloat(LatLng.split(',')[0]);
+      //   var lng = parseFloat(LatLng.split(',')[1]);
+      //   var collectionType = data.SrchResults[i].DESCRIPTION;
+      //   var streetName = data.SrchResults[i].ADDRESSSTREETNAME;
+      //   var postalCode = data.SrchResults[i].ADDRESSPOSTALCODE;
+      //   var hyperlink = data.SrchResults[i].HYPERLINK
+      //   var popup = popuptemp.replace('{programmeName}',programmeName)
+      //   .replace('{buildingName}',buildingName)
+      //   .replace('{collectionType}',collectionType)
+      //   .replace('{streetName}',streetName)
+      //   .replace('{postalCode}',postalCode)
+      //   .replace('LatLng',LatLng)
+      //   .replace('{hyperlink}',hyperlink);
+      //   var binicon = L.AwesomeMarkers.icon({
+      //   prefix: 'fa',
+      //   markerColor: 'orange',
+      //   icon: 'print'
+      //   })
+      //   inktonerMarker = L.marker([lat, lng], {icon: binicon}).bindPopup(popup,{minWidth:100});
+      //   inktonerMarker.on('click',function(e){
+      //       var popup = e.target.getPopup();
+      //       var content = popup.getContent();
+      //       const element = document.getElementById("result");
+      //       element.innerHTML = content;
+      //   })
+      //   binCluster.addLayer(inktonerMarker)
+      //   
     }
       binCluster.addLayer(eBinlayerGroup)
       binCluster.addLayer(bbBinlayerGroup)
       binCluster.addLayer(batteryBinlayerGroup)
       binCluster.addLayer(mannedlayerGroup)
       binCluster.addLayer(nonreglayerGroup)
+        //binClusterNew = binCluster
+        //map.removeLayer(eBinlayerGroup)
+        //map.removeLayer(bbBinlayerGroup)
+        //map.removeLayer(batteryBinlayerGroup)
+        //map.removeLayer(mannedlayerGroup)
+        //map.removeLayer(nonreglayerGroup)
+        //map.removeLayer(inktonerlayerGroup)
     }
     
     var ict_click = true; // Set to false to show no icons by default
@@ -372,6 +436,11 @@ promise.then(function(data) {
       manned_click = true;
       nonreg_click = true;
       inktoner_click = true;
+    //map.addLayer(bbBinlayerGroup)
+    //map.addLayer(batteryBinlayerGroup)
+    //map.addLayer(mannedlayerGroup)
+    //map.addLayer(nonreglayerGroup)
+    //map.addLayer(inktonerlayerGroup)
     $("#ict,#bulb,#battery,#manned,#nonreg,#inktoner").prop('checked', true).change();
     })
 
@@ -533,6 +602,19 @@ promise.then(function(data) {
         nonreg_click = false
       }
     })
+
+    // // Show only ink & toner cartridge layer
+    // $("#inktoner").click(function() {
+    //   if (inktoner_click == false) {
+    //     // Add ink & toner layer only
+    //     map.addLayer(inktonerlayerGroup)
+    //     inktoner_click = true
+    //   } else {
+    //     map.removeLayer(inktonerlayerGroup)
+    //     // Remove ink & toner layer only
+    //     inktoner_click = false
+    //   }
+    // })
     
     // Bind popup to town council boundary layers
     function onEachFeature(feature, layer) {
@@ -568,4 +650,51 @@ promise.then(function(data) {
   }
   boundaryLayer();
 
+    // var popup = L.popup({
+    //   closeButton: true,
+    //   autoClose: false
+    // })
+    // .setLatLng([1.51, 104.183])
+    // .setContent('<p>Text box on a map</p>')
+    // .openOn(map);
+
+    // L.Control.textbox = L.Control.extend({
+    //   onAdd: function(map) {
+        
+    //   var text = L.DomUtil.create('div');
+    //   text.id = "result";
+    //   //text.innerHTML = "<strong>text here</strong>"
+    //   return text;
+    //   },
+  
+    //   onRemove: function(map) {
+    //     // Nothing to do here
+    //   }
+    // });
+    // L.control.textbox = function(opts) { return new L.Control.textbox(opts);}
+    // L.control.textbox({ position: 'bottomright' }).addTo(map);
+
+  //   map.addControl(
+  //     new L.Control.Search({
+  //         position: 'topright',
+  //         layer: nonreglayerGroup,
+  //         initial: 'false',
+  //         zoom: 11,
+  //         marker: false,
+  //         collapsed: false,
+  //         autoCollapse: true,
+  //         filterData: function (text, records) {
+  //             // Search by title / address
+  //             var result = {};
+  //             for (var record in records) {
+  //                 if (lowerCase(record).indexOf(text) > -1 || lowerCase(records[record].layer.options.address).indexOf(text) > -1) {
+  //                     result[record] = records[record];
+  //                 }
+  //             }
+  //             return result;
+  //         }
+  //     }).on('search:locationfound', function (e) {
+  //         e.layer.openPopup();
+  //     })
+  // );
 });
