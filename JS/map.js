@@ -1,20 +1,3 @@
-// // Retrieve token //
-// var token;
-// $.ajax
-//   ({
-//     type: "POST",
-//     url: "https://developers.onemap.sg/privateapi/auth/post/getToken",
-//     dataType: 'json',
-//     async: false,
-//     data: {"email": "cepheiv@gmail.com", "password": "Test123!"},
-//     success: function (data){
-//         token = data.access_token;
-//     },s
-//     error: function (ex){
-//         console.log(ex.responseText);
-//     }
-// });
-
 // Define address variables
 var searchLatitude;
 var searchLongitude;
@@ -650,51 +633,4 @@ promise.then(function(data) {
   }
   boundaryLayer();
 
-    // var popup = L.popup({
-    //   closeButton: true,
-    //   autoClose: false
-    // })
-    // .setLatLng([1.51, 104.183])
-    // .setContent('<p>Text box on a map</p>')
-    // .openOn(map);
-
-    // L.Control.textbox = L.Control.extend({
-    //   onAdd: function(map) {
-        
-    //   var text = L.DomUtil.create('div');
-    //   text.id = "result";
-    //   //text.innerHTML = "<strong>text here</strong>"
-    //   return text;
-    //   },
-  
-    //   onRemove: function(map) {
-    //     // Nothing to do here
-    //   }
-    // });
-    // L.control.textbox = function(opts) { return new L.Control.textbox(opts);}
-    // L.control.textbox({ position: 'bottomright' }).addTo(map);
-
-  //   map.addControl(
-  //     new L.Control.Search({
-  //         position: 'topright',
-  //         layer: nonreglayerGroup,
-  //         initial: 'false',
-  //         zoom: 11,
-  //         marker: false,
-  //         collapsed: false,
-  //         autoCollapse: true,
-  //         filterData: function (text, records) {
-  //             // Search by title / address
-  //             var result = {};
-  //             for (var record in records) {
-  //                 if (lowerCase(record).indexOf(text) > -1 || lowerCase(records[record].layer.options.address).indexOf(text) > -1) {
-  //                     result[record] = records[record];
-  //                 }
-  //             }
-  //             return result;
-  //         }
-  //     }).on('search:locationfound', function (e) {
-  //         e.layer.openPopup();
-  //     })
-  // );
 });
