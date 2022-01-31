@@ -87,7 +87,7 @@ $(document).ready(function(){
                 if (data.results[i].BLK_NO == ""){
                   output[i] = data.results[i].ADDRESS
                 } else
-                output[i] = data.results[i].BLK_NO + " " + data.results[i].ROAD_NAME + " " + data.results[i].BUILDING + " SINGAPORE " +  data.results[i].POSTAL
+                output[i] = data.results[i].BLK_NO + " " + data.results[i].ROAD_NAME + " SINGAPORE " +  data.results[i].POSTAL
               }
               //return length of output, i.e. 10 results
               response(output.slice(0,output.length))
