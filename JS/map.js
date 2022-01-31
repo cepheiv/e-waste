@@ -99,6 +99,7 @@ $(document).ready(function(){
         log( ui.item ?
           "Selected: " + ui.item.label :
           "Nothing selected, input was " + this.value);
+          document.getElementById('searchButton').click();
       },
       open: function() {
         $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
