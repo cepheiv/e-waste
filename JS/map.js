@@ -2,6 +2,7 @@
 var searchLatitude;
 var searchLongitude;
 var searchval;
+var heremarker = null;
 
 var customMarker = L.AwesomeMarkers.icon({
   prefix: 'fa',
@@ -28,6 +29,9 @@ input.addEventListener("keypress", function(event) {
         .setContent('Your result: ' + results.results[0].ADDRESS)
         .setLatLng([searchLatitude, searchLongitude])
         .openOn(map);
+        if (heremarker != null) {
+          map.removeLayer(heremarker);
+        }
         heremarker = new L.Marker([searchLatitude, searchLongitude], {bounceOnAdd: true, icon: customMarker}).bindPopup(popup,{minWidth:50}).addTo(map);
         } else {
           alert("No results found.")
@@ -54,6 +58,9 @@ $("#searchButton").click(function() {
       .setContent('Your result: ' + results.results[0].ADDRESS)
       .setLatLng([searchLatitude, searchLongitude])
       .openOn(map);
+      if (heremarker != null) {
+        map.removeLayer(heremarker);
+      }
       heremarker = new L.Marker([searchLatitude, searchLongitude], {bounceOnAdd: true, icon: customMarker}).bindPopup(popup,{minWidth:50}).addTo(map);
       } else {
         alert("No results found.")
