@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    /* Padding for page header */
+    h2 {
+      padding-left: 20px;
+    }
+    /* Background for autocomplete bar */
+    .ui-autocomplete-loading {
+      background: white;
+    }
+    /* Style for e-waste info tooltip */
+    #ui-id-1 {
+      z-index: 9999;
+    }
+    /* Style for e-waste info tooltip */
+    label[class="form-check-label"] {
+      position: relative;
+      display: inline-block;
+      border-bottom: 1px solid black;
+    }
+    /* Style for e-waste info tooltip */
+    label[class="form-check-label"] .tooltiptext {
+      visibility: hidden;
+      width: 300px;
+      background-color: black;
+      color: #fff;
+      border-radius: 6px;
+      padding: 5px;
+      font-size: 12px;
+    /* Position the tooltip */
+      position: absolute;
+      z-index: 1;
+      top: 100%;
+      left: 50%;
+      margin-left: -60px;
+      pointer-events : none
+    }
+    /* Padding for collection points legend icon */
+    label[class="form-check-label"]:hover .tooltiptext {
+      visibility: visible;
+    }
+    /* Font size for collection points legend table */
+    table {
+      font-size:12px;
+    }
+    /* Margin for collection points legend icon */
+    span[class="fa-stack fa-1x"] {
+      margin-bottom: 5px;
+    }
+    /* Padding for collection points legend icon */
+    .fa-stack-2x {
+      padding-top: 4px;
+    }
+    /* Style for location result */
+    #result {
+      background: white;
+      padding-left: 10px;
+      width: 300px;
+      border-radius: 10px;
+      box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+    }
+    /* Align Show all and Clear all button to centre */
+    div[class="col-6"] {
+      text-align: center;
+    }
+    /* Set Show all and Clear all button to 215px */
+    #allBin {
+      width: 100%;
+    }
+    #clearall {
+      width: 100%;
+    }
+/*      .leaflet-popup{
+      width:300px;
+    } */
+    /* Highlight of row grids */
+     /* div[class="row"] {
+    outline: 1px dotted rgba(0, 0, 0, 0.25);
+    }
+    div[class^="col-"] {
+    background-color: rgba(255, 0, 0, 0.2);
+    outline: 1px dotted rgba(0, 0, 0, 0.5);
+    } */
+  </style>
+  <title>E-waste Map</title>
+  <h2><strong>E-waste Collection Points</strong></h2>
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="./JS/leaflet/leaflet.css">
+  <!-- Leaflet Marker Cluster -->
+  <link rel="stylesheet" href="./CSS/MarkerCluster.css" />
+  <link rel="stylesheet" href="./CSS/MarkerCluster.Default.css" />
+  <script src="./JS/leaflet/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <!-- Leaflet search -->
+  <script src="./JS/leaflet-search.min.js"></script>
+  <!-- Font awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Leaflet awesome markers -->
+  <script src="./JS/leaflet.awesome-markers.js"></script>
+  <link rel="stylesheet" href="./CSS/leaflet.awesome-markers.css">
+  <!-- jquery -->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+  <!-- Bootstrap CSS only -->
+  <link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+</head>
+<body>
+  <!-- Buttons Segment -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4 col-sm-12 col-lg-3">
+        <div class="btn-group">
+          <div class="d-grid gap-2 col-12">
+            <form>
+              <div class="row">
+                <div class="col-8">
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="searchBar" placeholder="Enter street name or postal code">
+                  </div>
+                </div>
+                <div class="d-grid gap-2 col-4 mx-auto">
+                  <button type="button" class="btn btn-primary" id='searchButton'>Submit</button>
+                </div>
+              </div>
+              </form>
+              <button type="button" id="currentlocation" class="btn btn-warning">Search Nearby</button>
+              <h5>I want to dispose:</h5>
+              <div class="form-check form-switch">
+                <input type="checkbox" id="ict" class="form-check-input" checked>
+                <label class="form-check-label" for="ict">ICT Equipment<span class="tooltiptext">Printers, power banks, computers, laptops, mobile phones & tablets, modems, routers, set-top boxes, small TVs & desktop monitors).
+                  Devices must be able to fit through the 500mm x 250mm slot.</span></label>
+              </div>
+              <div class="form-check form-switch">
+                <input type="checkbox" id="bulb" class="form-check-input" checked>
+                <label class="form-check-label" for="bulb">Bulbs and lamps<span class="tooltiptext">Light bulbs with bulb circumference of no more than 100mm. Long fluorescent/LED tubes are not accepted. Please dispose them through ALBA's collection drives or doorstep collection.</span></label>
+              </div>
+              <div class="form-check form-switch">
+                <input type="checkbox" id="battery" class="form-check-input" checked>
+                <label class="form-check-label" for="battery">Batteries<span class="tooltiptext">Batteries (AA, AAA, AAAA, D, C, 9-volt, Button Cell only) are accepted.</span></label>
+              </div>
+              <div class="form-check form-switch">
+                <input type="checkbox" id="nonreg" class="form-check-input" checked>
+                <label class="form-check-label" for="nonreg">Non-regulated products
+                  <span class="tooltiptext">
+                    Non-regulated products includes:
+                  <ul>
+                    <li>Game console, keyboard and mouse, docking stations, remote control</li>
+                    <li>Telephone (home, office), calculator, clocks, CCTV</li>
+                    <li>Power supply, wires, cables, chargers, torch light</li>
+                    <li>Headphones, earbuds, air-pods, camera, projector, Bluetooth speaker</li>
+                    <li>Home systems (sound systems: amplifier, speaker, woofer, sound bar)</li>
+                    <li>Thumb drive, portable hard disk, PCB board, SD cards</li>
+                    <li>Rice cooker, electric kettle, hair dryer and straightener, air fryer</li>
+                    <li>Fan, vacuum cleaner</li>
+                    <li>Small medical equipment (blood pressure monitor, blood glucose monitor)</li>
+                  </ul>
+                  </span>
+                </label>
+             </div>
+            <!-- <div class="form-check form-switch">
+              <input type="checkbox" id="inktoner" class="form-check-input" unchecked>
+              <label class="form-check-label" for="inktoner">Ink & toner cartridges<span class="tooltiptext">All ink and toner cartridges, regardless of brand.</span></label>
+            </div> -->
+            <div class='row'>
+              <div class="col-6">
+                <button type="button" id="allBin" class="btn btn-dark btn-block">Show All</button>
+              </div>
+              <div class="col-6">
+                <button type="button" id="clearall" class="btn btn-dark">Clear All</button>
+              </div>
+            </div>
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th colspan="3" style="text-align:center;">Map Legend</th>
+                </tr>
+                <tr>
+                  <th scope="col">Name of Programme</th>
+                  <th scope="col">Icon</th>
+                  <th scope="col">Type of e-waste accepted at collection point</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td rowspan="4">Extended Producer Responsibility (EPR) Scheme for E-waste organised by ALBA E-waste Smart Recycling Pte Ltd</td>
+                  <td>
+                    <span class="fa-stack fa-1x">
+                      <i class="fa-solid fa-location-pin fa-stack-2x" style="color:rgb(36, 145, 196)"></i>
+                      <i class="fa-solid fa-laptop fa-stack-1x fa-inverse fa-xs"></i>
+                    </span>
+                  </td>
+                  <td>ICT equipment, batteries and lamps only</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="fa-stack fa-1x">
+                      <i class="fa-solid fa-location-pin fa-stack-2x" style="color:darkslategray"></i>
+                      <i class="fa-solid fa-laptop fa-stack-1x fa-inverse fa-xs"></i>
+                    </span>
+                  </td>
+                  <td>ICT equipment and batteries only</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="fa-stack fa-1x">
+                      <i class="fa-solid fa-location-pin fa-stack-2x" style="color:limegreen"></i>
+                      <i class="fa-solid fa-lightbulb fa-stack-1x fa-inverse fa-xs"></i>
+                    </span>
+                  </td>
+                  <td>Batteries and lamps only</td>
+                </tr>
+                <tr>
+                  <td>
+                    <span class="fa-stack fa-1x">
+                      <i class="fa-solid fa-location-pin fa-stack-2x" style="color:red"></i>
+                      <i class="fa-solid fa-battery-quarter fa-stack-1x fa-inverse fa-xs"></i>
+                    </span>
+                  </td>
+                  <td>Batteries only</td>
+                </tr>
+                <tr>
+                  <td>Virogreen NECDC E-waste Recycling Programme for Non-regulated E-waste</td>
+                  <td>
+                    <span class="fa-stack fa-1x">
+                      <i class="fa-solid fa-location-pin fa-stack-2x" style="color:darkorchid"></i>
+                      <i class="fa-solid fa-recycle fa-stack-1x fa-inverse fa-xs"></i>
+                    </span>
+                  </td>
+                  <td>Non-regulated products only</td>
+                </tr>
+                <tr>
+                  <td>Shell-Metalo E-waste Recycling Programme for Non-regulated E-waste</td>
+                  <td>
+                    <span class="fa-stack fa-1x">
+                      <i class="fa-solid fa-location-pin fa-stack-2x" style="color:orange"></i>
+                      <i class="fa-solid fa-recycle fa-stack-1x fa-inverse fa-xs"></i>
+                    </span>
+                  </td>
+                  <td>Non-regulated products only</td>
+                </tr>
+                <!-- <tr>
+                  <td>Project Homecoming - Ink and Toner Cartridge Recycling Programme</td>
+                  <td>
+                    <span class="fa-stack fa-1x">
+                      <i class="fa-solid fa-location-pin fa-stack-2x" style="color:orange"></i>
+                      <i class="fa-solid fa-print fa-stack-1x fa-inverse fa-xs"></i>
+                    </span>
+                  </td>
+                  <td>Ink and toner cartridges only</td>
+                </tr> -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>  
+      <!-- Map Segment -->
+      <div class="col-md-8 col-sm-12 col-lg-6">
+        <div id="mapdiv" style="height:700px;width:100%"></div><p>
+        <script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>  
+        <script src="./JS/leaflet-heat.js"></script>
+        <script src="./JS/heatmappoints.js"></script>
+        <script src="./JS/heatmap.js"></script>
+        <!-- <p id="result"></p> -->
+      </div>
+      <!-- Show Marker Result -->
+      <div class="col-md-4 col-sm-12 col-lg-3">
+        <p id="result"></p>
+      </div>
+    </div>
+  </div>
+    <!-- Map End -->
+</body>
+</html>
