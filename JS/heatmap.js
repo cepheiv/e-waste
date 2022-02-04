@@ -626,9 +626,7 @@ promise.then(function(data) {
     
     
     addressPoints = addressPoints.map(function (p) { return [p[0], p[1], p[2]]; });
-    console.log(addressPoints)
     var heat = L.heatLayer(addressPoints,{radius: 50, maxZoom: 1}).addTo(map);
-    console.log(heat)
 
     // Bind popup to town council boundary layers
     function onEachFeature(feature, layer) {
