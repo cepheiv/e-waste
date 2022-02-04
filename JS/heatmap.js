@@ -199,7 +199,7 @@ promise.then(function(data) {
   for (var i = 1; i < data.SrchResults.length; i++) {
     var collectionType = data.SrchResults[i].DESCRIPTION;
     var programmeName = data.SrchResults[i].NAME;
-    if (collectionType == "Bin collection; E-waste accepted: ICT equipment, Batteries and Lamps only" || collectionType == "Manned collection (Contact staff for disposal); E-waste accepted: ICT equipment, Batteries and Lamps only" || collectionType ==  "Drop-off and Bin Collection; All regulated e-waste under First Schedule at https://go.gov.sg/prod-def-sl, Large Household Appliances, ICT Equipment, Portable Batteries, Lamps, Electric Mobility Devices") {
+    if (collectionType == "Bin collection; E-waste accepted: ICT equipment, Batteries and Lamps only" || collectionType == "Manned collection (Contact staff for disposal); E-waste accepted: ICT equipment, Batteries and Lamps only" || collectionType ==  "Drop-off and Bin collection; All regulated e-waste under First Schedule at https://go.gov.sg/prod-def-sl, Large Household Appliances, ICT Equipment, Portable Batteries, Lamps, Electric Mobility Devices") {
       var programmeName = data.SrchResults[i].NAME;
       var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
       var LatLng = data.SrchResults[i].LatLng;
@@ -471,7 +471,8 @@ promise.then(function(data) {
         binCluster.removeLayer(batteryBinlayerGroup)
         binCluster.removeLayer(mannedlayerGroup)
         binCluster.removeLayer(nonreglayerGroup)
-      boundaryLayer(); // Restore boundary layer
+      heat.addTo(map)
+      //boundaryLayer(); // Restore boundary layer
     })   
 
     // ICT click behaviour    

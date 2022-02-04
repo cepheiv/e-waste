@@ -1,3 +1,20 @@
+// // Retrieve token //
+// var token;
+// $.ajax
+//   ({
+//     type: "POST",
+//     url: "https://developers.onemap.sg/privateapi/auth/post/getToken",
+//     dataType: 'json',
+//     async: false,
+//     data: {"email": "cepheiv@gmail.com", "password": "Test123!"},
+//     success: function (data){
+//         token = data.access_token;
+//     },s
+//     error: function (ex){
+//         console.log(ex.responseText);
+//     }
+// });
+
 // Define address variables
 var searchLatitude;
 var searchLongitude;
@@ -166,7 +183,7 @@ var popuptemp =
 
 var promise = $.getJSON("./mapdata/ewaste.json");
 promise.then(function(data) {
-  var binCluster = L.markerClusterGroup({showCoverageOnHover:false}).addTo(map);
+  var binCluster = L.markerClusterGroup({showCoverageOnHover:false, maxClusterRadius:110}).addTo(map);
   var eBinMarker = [];
   var bbBinMarker = [];
   var batteryBinMarker =[];
@@ -182,7 +199,7 @@ promise.then(function(data) {
   for (var i = 1; i < data.SrchResults.length; i++) {
     var collectionType = data.SrchResults[i].DESCRIPTION;
     var programmeName = data.SrchResults[i].NAME;
-    if (collectionType == "Bin collection; E-waste accepted: ICT equipment, Batteries and Lamps only" || collectionType == "Manned collection (Contact staff for disposal); E-waste accepted: ICT equipment, Batteries and Lamps only" || collectionType ==  "Drop-off and Bin Collection; All regulated e-waste under First Schedule at https://go.gov.sg/prod-def-sl, Large Household Appliances, ICT Equipment, Portable Batteries, Lamps, Electric Mobility Devices") {
+    if (collectionType == "Bin collection; E-waste accepted: ICT equipment, Batteries and Lamps only" || collectionType == "Manned collection (Contact staff for disposal); E-waste accepted: ICT equipment, Batteries and Lamps only" || collectionType ==  "Drop-off and Bin collection; All regulated e-waste under First Schedule at https://go.gov.sg/prod-def-sl, Large Household Appliances, ICT Equipment, Portable Batteries, Lamps, Electric Mobility Devices") {
       var programmeName = data.SrchResults[i].NAME;
       var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
       var LatLng = data.SrchResults[i].LatLng;
@@ -613,7 +630,7 @@ promise.then(function(data) {
       if (feature.properties && feature.properties.TOWN_COUNCIL) {
         var town_council = feature.properties.TOWN_COUNCIL.replace("TC","TOWN COUNCIL")
           layer.bindTooltip(town_council,{
-            //autoClose: true
+            autoClose: true,
             sticky: true
             //direction: 'center'
           });
@@ -641,4 +658,51 @@ promise.then(function(data) {
   }
   boundaryLayer();
 
+    // var popup = L.popup({
+    //   closeButton: true,
+    //   autoClose: false
+    // })
+    // .setLatLng([1.51, 104.183])
+    // .setContent('<p>Text box on a map</p>')
+    // .openOn(map);
+
+    // L.Control.textbox = L.Control.extend({
+    //   onAdd: function(map) {
+        
+    //   var text = L.DomUtil.create('div');
+    //   text.id = "result";
+    //   //text.innerHTML = "<strong>text here</strong>"
+    //   return text;
+    //   },
+  
+    //   onRemove: function(map) {
+    //     // Nothing to do here
+    //   }
+    // });
+    // L.control.textbox = function(opts) { return new L.Control.textbox(opts);}
+    // L.control.textbox({ position: 'bottomright' }).addTo(map);
+
+  //   map.addControl(
+  //     new L.Control.Search({
+  //         position: 'topright',
+  //         layer: nonreglayerGroup,
+  //         initial: 'false',
+  //         zoom: 11,
+  //         marker: false,
+  //         collapsed: false,
+  //         autoCollapse: true,
+  //         filterData: function (text, records) {
+  //             // Search by title / address
+  //             var result = {};
+  //             for (var record in records) {
+  //                 if (lowerCase(record).indexOf(text) > -1 || lowerCase(records[record].layer.options.address).indexOf(text) > -1) {
+  //                     result[record] = records[record];
+  //                 }
+  //             }
+  //             return result;
+  //         }
+  //     }).on('search:locationfound', function (e) {
+  //         e.layer.openPopup();
+  //     })
+  // );
 });
