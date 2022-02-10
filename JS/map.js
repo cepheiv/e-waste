@@ -1,20 +1,3 @@
-// // Retrieve token //
-// var token;
-// $.ajax
-//   ({
-//     type: "POST",
-//     url: "https://developers.onemap.sg/privateapi/auth/post/getToken",
-//     dataType: 'json',
-//     async: false,
-//     data: {"email": "cepheiv@gmail.com", "password": "Test123!"},
-//     success: function (data){
-//         token = data.access_token;
-//     },s
-//     error: function (ex){
-//         console.log(ex.responseText);
-//     }
-// });
-
 // Define address variables
 var searchLatitude;
 var searchLongitude;
@@ -171,8 +154,7 @@ var popuptemp =
   '<strong>Type of Collection and E-waste accepted:</strong><br>{collectionType}<p>' +
   '<strong>Address:</strong><br>{streetName}, SINGAPORE {postalCode}<p>' +
   '<strong>Latitude & Longitude</strong><br>LatLng<p>' +
-  '<strong>More information at:</strong><br>{hyperlink}';
-
+  '<strong>More information at:</strong><br>{hyperlink}<p>'
 
 //var binCluster = L.markerClusterGroup({showCoverageOnHover:false});
 //var bbBinCluster = L.markerClusterGroup({showCoverageOnHover:false});
@@ -196,6 +178,7 @@ promise.then(function(data) {
   var mannedlayerGroup = L.layerGroup();
   var nonreglayerGroup = L.layerGroup();
   var inktonerlayerGroup = L.layerGroup();
+  // Directions on Google Maps
   for (var i = 1; i < data.SrchResults.length; i++) {
     var collectionType = data.SrchResults[i].DESCRIPTION;
     var programmeName = data.SrchResults[i].NAME;
@@ -216,6 +199,8 @@ promise.then(function(data) {
       .replace('{postalCode}',postalCode)
       .replace('LatLng',LatLng)
       .replace('{hyperlink}',hyperlink);
+      var link = "https://www.google.com/maps/dir/?api=1&destination=" + LatLng; 
+      popup = popup + '<strong>Directions:</strong><br><a href="' + link + '" target="_blank" rel="noopener noreferrer">Directions via Google Maps</a>'
       var binicon = L.AwesomeMarkers.icon({
         prefix: 'fa',
         markerColor: 'blue',
@@ -246,6 +231,8 @@ promise.then(function(data) {
         .replace('{postalCode}',postalCode)
         .replace('LatLng',LatLng)
         .replace('{hyperlink}',hyperlink);
+        var link = "https://www.google.com/maps/dir/?api=1&destination=" + LatLng; 
+        popup = popup + '<strong>Directions:</strong><br><a href="' + link + '" target="_blank" rel="noopener noreferrer">Directions via Google Maps</a>'
         var binicon = L.AwesomeMarkers.icon({
         prefix: 'fa',
         markerColor: 'green',
@@ -276,6 +263,8 @@ promise.then(function(data) {
         .replace('{postalCode}',postalCode)
         .replace('LatLng',LatLng)
         .replace('{hyperlink}',hyperlink);
+        var link = "https://www.google.com/maps/dir/?api=1&destination=" + LatLng; 
+        popup = popup + '<strong>Directions:</strong><br><a href="' + link + '" target="_blank" rel="noopener noreferrer">Directions via Google Maps</a>'
         var binicon = L.AwesomeMarkers.icon({
         prefix: 'fa',
         markerColor: 'red',
@@ -306,6 +295,8 @@ promise.then(function(data) {
         .replace('{postalCode}',postalCode)
         .replace('LatLng',LatLng)
         .replace('{hyperlink}',hyperlink);
+        var link = "https://www.google.com/maps/dir/?api=1&destination=" + LatLng; 
+        popup = popup + '<strong>Directions:</strong><br><a href="' + link + '" target="_blank" rel="noopener noreferrer">Directions via Google Maps</a>'
         var binicon = L.AwesomeMarkers.icon({
         prefix: 'fa',
         markerColor: 'cadetblue',
@@ -336,6 +327,8 @@ promise.then(function(data) {
         .replace('{postalCode}',postalCode)
         .replace('LatLng',LatLng)
         .replace('{hyperlink}',hyperlink);
+        var link = "https://www.google.com/maps/dir/?api=1&destination=" + LatLng; 
+        popup = popup + '<strong>Directions:</strong><br><a href="' + link + '" target="_blank" rel="noopener noreferrer">Directions via Google Maps</a>'
         var binicon = L.AwesomeMarkers.icon({
         prefix: 'fa',
         markerColor: 'purple',
@@ -366,6 +359,8 @@ promise.then(function(data) {
         .replace('{postalCode}',postalCode)
         .replace('LatLng',LatLng)
         .replace('{hyperlink}',hyperlink);
+        var link = "https://www.google.com/maps/dir/?api=1&destination=" + LatLng; 
+        popup = popup + '<strong>Directions:</strong><br><a href="' + link + '" target="_blank" rel="noopener noreferrer">Directions via Google Maps</a>'
         var binicon = L.AwesomeMarkers.icon({
         prefix: 'fa',
         markerColor: 'orange',
