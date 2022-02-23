@@ -161,23 +161,23 @@ var popuptemp =
 //var batteryBinCluster = L.markerClusterGroup({showCoverageOnHover:false});
 //var mannedCluster = L.markerClusterGroup({showCoverageOnHover:false});
 //var nonregCluster = L.markerClusterGroup({showCoverageOnHover:false});
-//var inktonerCluster = L.markerClusterGroup({showCoverageOnHover:false});
+//var edriveCluster = L.markerClusterGroup({showCoverageOnHover:false});
 
 var promise = $.getJSON("./mapdata/ewaste.json");
 promise.then(function(data) {
-  var binCluster = L.markerClusterGroup({showCoverageOnHover:false, maxClusterRadius:110}).addTo(map);
+  var binCluster = L.markerClusterGroup({showCoverageOnHover:false, maxClusterRadius:60}).addTo(map);
   var eBinMarker = [];
   var bbBinMarker = [];
   var batteryBinMarker =[];
   var mannedMarker = [];
   var nonregMarker = [];
-  var inktonerMarker = [];
+  var edriveMarker = [];
   var eBinlayerGroup = L.layerGroup();
   var bbBinlayerGroup = L.layerGroup();
   var batteryBinlayerGroup = L.layerGroup();
   var mannedlayerGroup = L.layerGroup();
   var nonreglayerGroup = L.layerGroup();
-  var inktonerlayerGroup = L.layerGroup();
+  var edrivelayerGroup = L.layerGroup();
   // Directions on Google Maps
   for (var i = 1; i < data.SrchResults.length; i++) {
     var collectionType = data.SrchResults[i].DESCRIPTION;
@@ -374,37 +374,37 @@ promise.then(function(data) {
             element.innerHTML = content;
         })
         nonreglayerGroup.addLayer(nonregMarker)
-      // } else if (collectionType == "Bin collection; E-waste accepted: Ink, toner cartridges") {
-      //   var programmeName = data.SrchResults[i].NAME;
-      //   var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
-      //   var LatLng = data.SrchResults[i].LatLng;
-      //   var lat = parseFloat(LatLng.split(',')[0]);
-      //   var lng = parseFloat(LatLng.split(',')[1]);
-      //   var collectionType = data.SrchResults[i].DESCRIPTION;
-      //   var streetName = data.SrchResults[i].ADDRESSSTREETNAME;
-      //   var postalCode = data.SrchResults[i].ADDRESSPOSTALCODE;
-      //   var hyperlink = data.SrchResults[i].HYPERLINK
-      //   var popup = popuptemp.replace('{programmeName}',programmeName)
-      //   .replace('{buildingName}',buildingName)
-      //   .replace('{collectionType}',collectionType)
-      //   .replace('{streetName}',streetName)
-      //   .replace('{postalCode}',postalCode)
-      //   .replace('LatLng',LatLng)
-      //   .replace('{hyperlink}',hyperlink);
-      //   var binicon = L.AwesomeMarkers.icon({
-      //   prefix: 'fa',
-      //   markerColor: 'orange',
-      //   icon: 'print'
-      //   })
-      //   inktonerMarker = L.marker([lat, lng], {icon: binicon}).bindPopup(popup,{minWidth:100});
-      //   inktonerMarker.on('click',function(e){
-      //       var popup = e.target.getPopup();
-      //       var content = popup.getContent();
-      //       const element = document.getElementById("result");
-      //       element.innerHTML = content;
-      //   })
-      //   binCluster.addLayer(inktonerMarker)
-      //   
+      } else if (collectionType == "E-waste collection drive; E-waste accepted: All regulated consumer products under First Schedule at https://go.gov.sg/prod-def-sl") {
+        var programmeName = data.SrchResults[i].NAME;
+        var buildingName = data.SrchResults[i].ADDRESSBUILDINGNAME;
+        var LatLng = data.SrchResults[i].LatLng;
+        var lat = parseFloat(LatLng.split(',')[0]);
+        var lng = parseFloat(LatLng.split(',')[1]);
+        var collectionType = data.SrchResults[i].DESCRIPTION;
+        var streetName = data.SrchResults[i].ADDRESSSTREETNAME;
+        var postalCode = data.SrchResults[i].ADDRESSPOSTALCODE;
+        var hyperlink = data.SrchResults[i].HYPERLINK
+        var popup = popuptemp.replace('{programmeName}',programmeName)
+        .replace('{buildingName}',buildingName)
+        .replace('{collectionType}',collectionType)
+        .replace('{streetName}',streetName)
+        .replace('{postalCode}',postalCode)
+        .replace('LatLng',LatLng)
+        .replace('{hyperlink}',hyperlink);
+        var binicon = L.AwesomeMarkers.icon({
+        prefix: 'fa',
+        markerColor: 'black',
+        icon: 'print'
+        })
+        edriveMarker = L.marker([lat, lng], {icon: binicon}).bindPopup(popup,{minWidth:100});
+        edriveMarker.on('click',function(e){
+            var popup = e.target.getPopup();
+            var content = popup.getContent();
+            const element = document.getElementById("result");
+            element.innerHTML = content;
+        })
+        edrivelayerGroup.addLayer(edriveMarker)
+        map.addLayer(edrivelayerGroup)
     }
       binCluster.addLayer(eBinlayerGroup)
       binCluster.addLayer(bbBinlayerGroup)
@@ -417,14 +417,14 @@ promise.then(function(data) {
         //map.removeLayer(batteryBinlayerGroup)
         //map.removeLayer(mannedlayerGroup)
         //map.removeLayer(nonreglayerGroup)
-        //map.removeLayer(inktonerlayerGroup)
+        //map.removeLayer(edrivelayerGroup)
     }
     
     var ict_click = true; // Set to false to show no icons by default
     var bulb_click = true;
     var battery_click = true;
     var nonreg_click = true;
-    var inktoner_click = true;
+    var edrive_click = true;
 
     $("#allBin").click(function() {
       binCluster.addLayer(eBinlayerGroup)
@@ -432,19 +432,20 @@ promise.then(function(data) {
       binCluster.addLayer(batteryBinlayerGroup)
       binCluster.addLayer(mannedlayerGroup)
       binCluster.addLayer(nonreglayerGroup)
+      binCluster.addLayer(edrivelayerGroup)
       map.addLayer(binCluster)
       ict_click = true;
       bulb_click = true;
       battery_click = true;
       manned_click = true;
       nonreg_click = true;
-      inktoner_click = true;
+      edrive_click = true;
     //map.addLayer(bbBinlayerGroup)
     //map.addLayer(batteryBinlayerGroup)
     //map.addLayer(mannedlayerGroup)
     //map.addLayer(nonreglayerGroup)
-    //map.addLayer(inktonerlayerGroup)
-    $("#ict,#bulb,#battery,#manned,#nonreg,#inktoner").prop('checked', true).change();
+    //map.addLayer(edrivelayerGroup)
+    $("#ict,#bulb,#battery,#manned,#nonreg,#edrive").prop('checked', true).change();
     })
 
     // Clear all markers / layers, except the basemap layer and boundary layer
@@ -457,8 +458,8 @@ promise.then(function(data) {
       bulb_click = false;
       battery_click = false;
       nonreg_click = false;
-      inktoner_click = false;
-      $("#ict,#bulb,#battery,#manned,#nonreg,#inktoner").prop('checked', false).change();
+      edrive_click = false;
+      $("#ict,#bulb,#battery,#manned,#nonreg,#edrive").prop('checked', false).change();
       document.getElementById("result").innerHTML = "" // Clear info
         });
         binCluster.removeLayer(eBinlayerGroup)
@@ -606,18 +607,18 @@ promise.then(function(data) {
       }
     })
 
-    // // Show only ink & toner cartridge layer
-    // $("#inktoner").click(function() {
-    //   if (inktoner_click == false) {
-    //     // Add ink & toner layer only
-    //     map.addLayer(inktonerlayerGroup)
-    //     inktoner_click = true
-    //   } else {
-    //     map.removeLayer(inktonerlayerGroup)
-    //     // Remove ink & toner layer only
-    //     inktoner_click = false
-    //   }
-    // })
+    // Show only edrive layer
+    $("#edrive").click(function() {
+      if (edrive_click == false) {
+        // Add     // Show only edrive layer only
+        map.addLayer(edrivelayerGroup)
+        edrive_click = true
+      } else {
+        map.removeLayer(edrivelayerGroup)
+        // Remove edrive layer only
+        edrive_click = false
+      }
+    })
     
     // Bind popup to town council boundary layers
     function onEachFeature(feature, layer) {
