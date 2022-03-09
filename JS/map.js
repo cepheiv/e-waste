@@ -165,7 +165,7 @@ var popuptemp =
 
 var promise = $.getJSON("./mapdata/ewaste.json");
 promise.then(function(data) {
-  var binCluster = L.markerClusterGroup({showCoverageOnHover:false, maxClusterRadius:60}).addTo(map);
+  var binCluster = L.markerClusterGroup({showCoverageOnHover:false, maxClusterRadius:65}).addTo(map);
   var eBinMarker = [];
   var bbBinMarker = [];
   var batteryBinMarker =[];
