@@ -432,7 +432,8 @@ promise.then(function(data) {
       binCluster.addLayer(batteryBinlayerGroup)
       binCluster.addLayer(mannedlayerGroup)
       binCluster.addLayer(nonreglayerGroup)
-      binCluster.addLayer(edrivelayerGroup)
+      //binCluster.addLayer(edrivelayerGroup)
+      map.addLayer(edrivelayerGroup)
       map.addLayer(binCluster)
       ict_click = true;
       bulb_click = true;
